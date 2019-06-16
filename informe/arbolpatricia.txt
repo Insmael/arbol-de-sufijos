@@ -3,19 +3,51 @@ Como lo que la implementación de los arboles patricia no necesita tener el mét
 La ventaja de no tener la eliminación, es que podemos reutilizar las clases de los tries, con pocos cambios.
 El nodo hoja no cambia.
 El nodo especial del arbol patricia se implementa bajo el nombre de PEmptyNode, y seguirá siendo referenciado como el nodo especial. Así mismo, para el nodo interno, su nueva implementación es en la clase de nombre PInnerNode, y seguirá siendo  referenciado como el nodo interno. Tienendo estos supuestos, el nodo especial tiene el mismo comportamiento de inserción que antes, al ser reemplazado por un nodo interno, y siguiendo la inserción en este nuevo nodo interno.
+Así la inserción en el nodo especial ahora implementa el nodo interno PInnerNode.
+
+public TrieNode insert(String word, int index) {
+  return new PInnerNode(word, index);
+}
+
 El nodo interno debe guardar el camino de el nodo actual hacia los nodos hijos, que pueden ser de largo variable. Con una lista de strings, y manteniendo la asociación de indices entre esta lista de strings, y la correspondiente lista de nodos, tenemos la estructura para efectuar las operaciones.
 La operación de inserción en el nodo interno tiene varios casos:
 
 si hay un hijo con camino igual al substring actual en la inserción. Esto es, si en el nodo interno toca ver el carácter i de la palabra a insertar, y hay camino x de largo j, con j >= 1, tal que el substring de la palabra a insertar desde el caracter i, hasta el carácter i+j-1 (todo el substring correspondiente), entonces, simplemente se sigue la inserción en el nodo asociado a aquel substring, avanzando el índice i+j, el siguiente elemento del string a insertar despues del substring contenido en el camino. El resto de los casos es cuando este no ocurre.
-%codigo insertar%
-
-if()
 Si comparte solo un substring del camino. Osea, son iguales desde i hasta k, i+k, con k menor a j, entonces se debe crear un nuevo nodo interno que tenga de nodo hijo a un nodo interno con el resto del camino original, es decir de k hasta j como camino. Como el camino hacia los nodos hijos se guarda en los padres, basta con pasar este nuevo camino y el puntero al antiguo camino para tener este hijo. Luego de que tengamos el nuevo nodo con hijo el antiguo nodo, entonces seguimos la inserción en el nuevo nodo, actualizando el índice a i+k, apuntando al primer elemento que no se ha visto.
-%codigo insertar%
 Si el carácter que toca ver del string a insertar es el simbolo terminal, entonces se construye una hoja.
-%codigo insertar%
 Si no sucede ninguno de los casos anteriores, es porque el resto del string a insertar no tiene ningúna similitud con los hijos del nodo interno actual. Y procedemos a crear un nuevo nodo hijo, asociandole el resto del string (menos el carácter terminal), y actualizamos el índice para que indique al último elemento del string a insertar, pasandole el resto de la inserción al nuevo nodo interno, para que este cree luego el nodo hoja correspondiente.
+
 %codigo isertar%
+public TrieNode insert(String word, int index){
+  int at = this.containsAt(word, index);
+  if (at != -1) {
+    int length = this.containsLength(word,index,at);
+    String camino = caminos.get(at);
+    TrieNode oldson = sons.get(at);
+    if (length == camino.length()){
+      oldson.insert(word,index+length);
+    } else {
+      //length es menor al camino completo
+      String newCamino = camino.substring(0,length);
+      String restCamino = camino.substring(length, camino.length());
+      TrieNode newson = new PInnerNode(restCamino, oldson);
+      caminos.set(at, newCamino);
+      sons.set(at, newson);
+      newson.insert(word, index+length);
+    }
+  } else {
+    //si no lo contiene y es para crear una hoja.
+    if (word.charAt(index) == '$'){
+      sons.add(new Leaf(word));
+    //si no lo contiene y no es una hoja.
+    } else {
+      int subLength = word.length()-index-1;
+      caminos.add(word.substring(index, subLength));
+      sons.add(new InnerNode(word, index+subLength));
+    }
+  }
+  return this;
+}
 
 La busqueda en este nuevo arbol no cambia ni en el nodo especial ni en el nodo hojo.
 En el nodo interno, la búqueda tiene que comparar el substring entero que lleva al siguiente nodo, si está, se sigue la busqueda en este, si no está, la busqueda termina entregando falso, indicando que no se encontraba en el arbol.

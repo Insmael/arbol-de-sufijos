@@ -1,0 +1,2 @@
+el arbol de sufijos es un arbol patricia con todos los sufijos de un texto. Respecto a su implementación, las hojas no guardan strings, sino el índice que responde a la posición inicial del sufijo en el texto (pues la pocisión final de todos los sufijos en el texto es el último carácter del texto, con la posición inicial del sufijo del texto y el texto en sí, podemos recuperar el sufijo completo).
+La implementación del arbol de sufijos entonces requiere modificar las hojas para que ya no guarden una palabra, sino el índice asociado a la búsqueda.

@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * Unit test for simple App.
  */
-public class TrieNodeTest
+public class TrieTest
 {
     /**
      * Rigorous Test :-)
@@ -19,7 +19,7 @@ public class TrieNodeTest
     @Test
     public void emptyTrieSearch()
     {
-        Trie aTrie = new Trie();
+        ITrie aTrie = new Trie();
         assertFalse(aTrie.search(""));
         assertFalse(aTrie.search("dogo"));
         assertFalse(aTrie.search("marciano"));
@@ -28,7 +28,7 @@ public class TrieNodeTest
     @Test
     public void EmptyWordTrieSearch()
     {
-        Trie aTrie = new Trie();
+        ITrie aTrie = new Trie();
         aTrie.insert("");
         assertTrue(aTrie.search(""));
         assertFalse(aTrie.search("dogo"));
@@ -38,7 +38,7 @@ public class TrieNodeTest
     @Test
     public void oneWordTrieSearch()
     {
-        Trie aTrie = new Trie();
+        ITrie aTrie = new Trie();
         aTrie.insert("urano");
         assertFalse(aTrie.search(""));
         assertFalse(aTrie.search("dogo"));
@@ -49,7 +49,7 @@ public class TrieNodeTest
     @Test
     public void listBuildTrieAllWordsSearch()
     {
-        Trie aTrie = new Trie();
+        ITrie aTrie = new Trie();
         List<String> words = new ArrayList<String>();
         words.add("dogo");
         words.add("canis");
@@ -73,7 +73,7 @@ public class TrieNodeTest
     @Test
     public void ManyWordTriesuffixSearch()
     {
-        Trie aTrie = new Trie();
+        ITrie aTrie = new Trie();
         List<String> words = new ArrayList<String>();
         words.add("dogo");
         words.add("canis");
@@ -98,9 +98,9 @@ public class TrieNodeTest
     }
 
     @Test
-    public void suffixTriesuffixSearch()
+    public void preffixTriesuffixSearch()
     {
-        Trie aTrie = new Trie();
+        ITrie aTrie = new Trie();
         List<String> words = new ArrayList<String>();
         words.add("s");
         words.add("si");
@@ -114,5 +114,24 @@ public class TrieNodeTest
           assertTrue(aTrie.search(word));
         }
         assertFalse(aTrie.search("sir"));
+    }
+
+    @Test
+    public void suffixTriePreffixSearch()
+    {
+        ITrie aTrie = new Trie();
+        List<String> words = new ArrayList<String>();
+        words.add("siracusa");
+        words.add("iracusa");
+        words.add("acusa");
+        words.add("racusa");
+        words.add("sa");
+        words.add("cusa");
+        words.add("a");
+        aTrie.insert(words);
+        for (String word : words){
+          assertTrue(aTrie.search(word));
+        }
+        assertFalse(aTrie.search("usa"));
     }
 }

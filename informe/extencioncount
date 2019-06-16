@@ -1,0 +1,6 @@
+la extención que se debe efectuar tanto en el trie normal como en el arbol patricia para soportar el método de conteo es el siguiente.
+Cada vez que se agrega un elemento al arbol, cada sufijo aumenta en uno su número, esto es, cada nodo interno. luego, la memoria necesaria extra es un número por nodo, con O(n) nodos, es un espacio extra de O(n). Las hojas también deben tener un número asociado. con n hojas, son O(n) números más, uno por hoja. luego, la extención requiere de O(n) espacio extra, manteniendo la estructura completa con O(n) de espacio.
+La extención en ambos arboles es igual.
+en los nodos hojas, al crearse una hoja se inicia el contador de apariciones en 1. Al momento de recibir la instrucción de insertar el nodo hoja, aumenta en uno su contador.
+en los nodos internos, al crearse también se crean con un contador en 1, y al insertarse un nuevo nodo, en el momento de pasar la inserción al siguiente nodo, el nodo actual aumenta en uno su contador. Así si se pregunta por medios caminos en el arbol patricia también se entrega una respuesta correcta.
+Por último, en el caso del nodo especial, el conteo devuelve siempre cero.

@@ -9,17 +9,80 @@ la clase de nodo especial (EmptyNode) no posee miembros. Solo implementa los mé
 la construcción del árbol trie consiste en ir insertando strings en la estructura. Todos los strings presentes en el trie terminan con el simbolo terminal, de modo que la inserción en el trie consiste en pasarle el trabajo de inserción al nodo raíz, pero con el nuevo string modificado, al agregarle el símbolo terminal.Como la inserción la implementan los nodos, tenemos una inserción diferente para cada tipo de nodo.
 Para guardar las palabras completas en los nodos, el método de inserción de los nodos recibe la palabra a insertar (que ya posee el símbolo terminal), y un índice que indica el número de caracter de la palabra que toca por leer o comparar
 Si insertamos en el nodo especial, es debido a que insertamos palablas sobre el arbol vacío. Esto se resuelve cambiando el nodo especial por un nodo interno para la raíz del arbol, y pasar la inserción al nuevo nodo interno.
+
 %poner el método inserción del nodo especial%
+public TrieNode insert(String word, int index) {
+  return new InnerNode(word, index);
+}
+
 Para poder hacer este cambio, el método devuelve el nuevo nodo que será el que estaba en esta pocisión, de modo que la inserción en el nodo interno debe devolverse a si mismo, y el nodo hoja, a pesar de no utilizarse nunca su valor de retorno, también.
 Si insertamos en un nodo interno, significa que todabía tenemos que consumir carácteres de la palabra a insertar. en el caso de que exista un nodo hijo con el siguiente simbolo a leer, pasamos la inserción a aquel nodo hijo, actualizando el índice del método (para que apunte al siguiente carácter de la palabra a insertar). En caso de no haber un nodo asociado con el caracter apuntado por el índice de la palabra a insertar, entonces lo debemos crear, si el caracter es el carácter terminal, entonces creamos una hoja, sino, creamos un nodo interno y le pasamos la inserción, actualizando el índice (que apunta al siguiente carácter de la palabra a insertar).
+
 %método inserción del nodo interno%
+public TrieNode insert(String word, int index){
+  if (caracteres.contains(word.charAt(index))){
+    TrieNode nextNode = sons.get(caracteres.indexOf(word.charAt(index)));
+    nextNode.insert(word, index+1);
+  } else {
+    caracteres.add(word.charAt(index));
+    if (word.charAt(index) == '$'){
+      sons.add(new Leaf(word));
+    } else {
+      sons.add(new InnerNode(word, index+1));
+    }
+  }
+  return this;
+}
+
+public InnerNode(String word, int index){
+  this.sons = new ArrayList<TrieNode>();
+  this.caracteres = new ArrayList<Character>();
+  caracteres.add(word.charAt(index));
+  if(word.charAt(index) == '$'){
+    sons.add(new Leaf(word));
+  }
+  else {
+    sons.add(new InnerNode(word, index+1));
+  }
+}
+
 Por último, si intentamos insertar en un nodo hoja, es porque todo el string a insertar coincidía con la palabra guardada en la hoja, y por lo tanto la inserción termina sin haber cambios.
+
 %método inserción en el nodo hoja%
+public TrieNode insert(String word, int index){
+  return this;
+}
+
+public Leaf(String word){
+  this.word = word;
+}
 
 búsqueda en el trie es similar a la inserción, donde el arbol le pasa el trabajo al nodo raíz, pasandole la palabra extendida con el simbolo terminal y un índice (inicializado en 0) que indica el siguiente caracter a inspeccionar de la palabra buscada. Y que cada tipo de nodo implementa esta busqueda de manera diferente.
 El nodo especial entrega falso, pues representa un arbol vacío.
+
 %metodo buscar arbol vacío%
+public Boolean search(String word, int index){
+  return false;
+}
+
 Un nodo interno busca el carácter actual de la palabra en su lista de caracteres, si no está, entrega falso, indicando que la palabra no se encontro. Si está, sigue la busqueda en el siguiente nodo, actualizando el índice para que indique al siguiente caracter de la palabra.
+
 %métdo buscar nodo interior%
+public Boolean search(String word, int index){
+  if (caracteres.contains(word.charAt(index)) ) {
+    TrieNode nextNode = sons.get(caracteres.indexOf(word.charAt(index)));
+    return nextNode.search(word, index+1);
+  }
+  else{
+    return false;
+  }
+}
+
 El nodo hoja entrega verdadero. Indicando que la palabra se encontro.
+
 %método buscar nodo hoja%
+public Boolean search(String word, int index){
+  assert index== word.length();
+  assert index == this.word.length();
+  return true;//return this.word.equal(word);
+}

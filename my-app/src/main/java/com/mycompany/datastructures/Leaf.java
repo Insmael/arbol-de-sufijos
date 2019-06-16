@@ -1,19 +1,29 @@
 package com.mycompany.datastructures;
 
-class Leaf implements TrieNode {
+import com.mycompany.visitors.IVisitor;
+
+public class Leaf implements TrieNode {
   String word;
+  int count;
 
   public Leaf(String word){
     this.word = word;
+    this.count =0;
   }
 
-  public TrieNode insert(String word, int index){
-    return this;
+  public String getWord(){
+    return this.word;
   }
 
-  public Boolean search(String word, int index){
-    assert index== word.length();
-    assert index == this.word.length();
-    return true;//return this.word.equal(word);
+  public int getCount(){
+    return this.count;
+  }
+
+  public void countsum1(){
+    this.count+=1;
+  }
+
+  public void accept(IVisitor visitor){
+    visitor.visitLeaf(this);
   }
 }

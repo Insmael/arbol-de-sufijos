@@ -1,6 +1,7 @@
 package com.mycompany.datastructures;
 
-interface TrieNode {
-  public abstract TrieNode insert(String word, int index);
-  public abstract Boolean search(String word, int index);
+import com.mycompany.visitors.IVisitor;
+
+public interface TrieNode {
+  public abstract void accept(IVisitor visitor);
 }
