@@ -94,6 +94,7 @@ public class TrieNodeTest
         assertFalse(aTrie.search("a"));
         assertFalse(aTrie.search("solapa"));
         assertFalse(aTrie.search("chancho"));
+        assertTrue('$'<'0');
     }
 
     @Test
@@ -101,11 +102,11 @@ public class TrieNodeTest
     {
         Trie aTrie = new Trie();
         List<String> words = new ArrayList<String>();
-        words.add("siracusa");
         words.add("s");
         words.add("si");
         words.add("sira");
         words.add("sirac");
+        words.add("siracusa");
         words.add("siracu");
         words.add("siracus");
         aTrie.insert(words);
