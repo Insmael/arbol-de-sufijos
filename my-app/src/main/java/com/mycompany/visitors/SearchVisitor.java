@@ -15,6 +15,7 @@ public class SearchVisitor implements IVisitor{
     this.contains = false;
   }
 
+
   public Boolean veredict(){
     return this.contains;
   }
@@ -43,9 +44,18 @@ public class SearchVisitor implements IVisitor{
     }
   }
 
+  public void visitSNode(SNode node){
+    visitPNode(node);
+  }
+
   public void visitLeaf(Leaf node){
     //contains = true; //es suficiente
     contains = word.equals(node.getWord()); //porsilasmoscas
+  }
+
+  public void visitSLeaf(SLeaf node){
+    this.contains = true; //es suficiente
+
   }
 
 }

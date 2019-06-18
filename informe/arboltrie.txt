@@ -1,88 +1,24 @@
-los árboles trie tienen dos tipos de nodos, los internos y las hojas.
-todos los strings que contiene el trie terminan en $, y lo que diferencia a un nodo hoja de un nodo interno es último caracter que llevo hasta el nodo, siendo $ para un nodo hoja, y cualquier otro para un nodo interno, incluyendo el carácter '' (vacío) para la raíz del árbol.
-Modelamos este ordenamiento con diferentes clases. Una clase para las hojas y una clase para los nodos internos.
-Para el caso particular de que el árbol este vacío, se tiene una clase especial, que a todas las búsquedas devuelve falso.
-Como tenemos solo dos operaciones sobre la estructura de nodos, insertar y buscar, al implementar las clases de nodos, todas utilizando una interfaz comun, así, al implementar las operaciones en cada clase, conseguimos el comportamiento deseado para cada caso (cada clase) de forma automática.
-La clase Hoja (Leaf) guarda la palabra que representa, de modo que al tener un string es suficiente.
-La clase Nodo interno (InnerNode) debe tener referencias hacia los nodos hijos, y los carácteres hacia ellos. La implementación se logra al tener dos listas una de nodos y otra de carácteres. Como siempre se extienden a la vez las dos listas, la relación entre nodo y caracter se mantiene ya que comparten el mísmo indice en las diferentes listas.
-la clase de nodo especial (EmptyNode) no posee miembros. Solo implementa los métodos.
-la construcción del árbol trie consiste en ir insertando strings en la estructura. Todos los strings presentes en el trie terminan con el simbolo terminal, de modo que la inserción en el trie consiste en pasarle el trabajo de inserción al nodo raíz, pero con el nuevo string modificado, al agregarle el símbolo terminal.Como la inserción la implementan los nodos, tenemos una inserción diferente para cada tipo de nodo.
-Para guardar las palabras completas en los nodos, el método de inserción de los nodos recibe la palabra a insertar (que ya posee el símbolo terminal), y un índice que indica el número de caracter de la palabra que toca por leer o comparar
-Si insertamos en el nodo especial, es debido a que insertamos palablas sobre el arbol vacío. Esto se resuelve cambiando el nodo especial por un nodo interno para la raíz del arbol, y pasar la inserción al nuevo nodo interno.
+La estructura del arbol de sufijos posee tanto nodos internos como nodos hojas.
+cada tipo de nodo siendo representado por una clase. facilitando la separcación de los datos y los procedimientos de cada una.
+para evitar el recorrer subárboles en búsquedas o cálculos, en cada nodo se guarda una lista de 4-tuplas asociados, un puntero a un nodo, un carácter, un índice y un largo. Cada 4-tupla representa un nodo hijo y el camino que lleva a el, y la lista de las 4-tuplas es la lista de todos los nodos hijos y sus respectivos caminos que nacen de un nodo interno. el carácter de la 4-tupla es el primer carácter del camino, el índice indica la posición del camino en el texto, y el largo indica el total de carácteres que pertenecen al camino. Son a lo más $|\sigma| +1$ hijos por nodo, lo que requiere O(1) para la lista de 4-tupla por nodo. Al ser a lo más O(n) nodos, se necesita O(n) de espacio para esta estructura.
+Sea S el conjunto de n sufijos del texto usado para crear el arbol de sufijos, y sea len(i) el largo del sufijo i del conjunto S, con 0<i<=n-1. Entonces como todos los sufijos tienen diferente largo, cada string s de S es único y se inserta una sola vez en el arbol de sufijos.
+Como cada string se inserta una sola vez, y cada hoja representa un string insertado, entonces el nodo hoja no necesita llevar la cuenta de cuantas veces se ha insertado el string al que corresponde, pues si existe es que es uno, y si no existe es que es cero. Basta con tener un solo valor en el, el índice que apunta al inicio del string al que corresponde en el texto completo. Si el texto es de largo m, entonces el numero de sufijos n = m, y al haber un nodo por cada sufijo, con cada hoja ocupando un espacio O(1), y una hoja por sufijo, el espacio total utilizado por las hojas es de O(n).
+Para lograr un conteo de prefijos más rápido, en cada nodo interno también se guarda el número de string que lo poseen como prefijo. Como ejemplo, si un nodo interno tiene como hijos dos hojas y nada más. Entonces el contador de aquel nodo interno es dos, pues se han insertado dos string que lo tienen como prefijo. Si en cambio tenemos otro nodo interno con dos hijos como los nodos internos descritos recien, entonces este nuevo nodo interno tiene su contador en cuatro, reflejando las cuatro hojas que le siguen, dos por cada nodo interno que es su hijo. Ahora, como son a lo más O(n) nodos internos en un arbol de sufijos de un texto de largo n (que es el mísmo numero de sufijos que posee el arbol de sufijos), entonces, con un número extra en cada nodo agrega O(n) extra de espacio.
+El número de punteros de cada nodo interno a sus hijos es a lo más |\sigma|+1 con \sigma el conjunto de caractéres del texto, el espacio requerido por nodo es de O(1), y al ser a lo más O(n) nodos, el espacio requerido total es de O(n).
+Luego, el completo de la estructura del arbol requiere de O(n) de espacio total.
 
-%poner el método inserción del nodo especial%
-public TrieNode insert(String word, int index) {
-  return new InnerNode(word, index);
-}
+CONSULTAS
+Las consultas sobre el arbol (y el armado del arbol) se implementan usando el visitor pattern. Esto es, la lógica de las consultas se definen en clases separadas de las clases de datos (clases de nodos del arbol de sufijos). Esta estrategia facilita el uso de variables globales para cada tipo de consulta, y a la vez variables globales para cada instancia de consulta, beneficio aprobecha las siguientes consultas.
 
-Para poder hacer este cambio, el método devuelve el nuevo nodo que será el que estaba en esta pocisión, de modo que la inserción en el nodo interno debe devolverse a si mismo, y el nodo hoja, a pesar de no utilizarse nunca su valor de retorno, también.
-Si insertamos en un nodo interno, significa que todabía tenemos que consumir carácteres de la palabra a insertar. en el caso de que exista un nodo hijo con el siguiente simbolo a leer, pasamos la inserción a aquel nodo hijo, actualizando el índice del método (para que apunte al siguiente carácter de la palabra a insertar). En caso de no haber un nodo asociado con el caracter apuntado por el índice de la palabra a insertar, entonces lo debemos crear, si el caracter es el carácter terminal, entonces creamos una hoja, sino, creamos un nodo interno y le pasamos la inserción, actualizando el índice (que apunta al siguiente carácter de la palabra a insertar).
+Todas las consultas requieren de un texto sobre el que trabajar, y el arbol de sufijos asociado, de modo que todas las instancias de consultas guardan un puntero al texto asociado al arbol de sufijos. De esta forma, al necesitar saber el suffijo o prefijo asociado a un nodo, se recuperan los indices y largos en los nodos, y luego con estos se busca el correspondiente subtring en el texto para hacer los cálculos. En esta sección se refiere al string texto como Text, que es de largo n, y tiene el carácter terminal "$". de modo que un sufijo que tenga índice asociado r corresponde a Text[r,n]
 
-%método inserción del nodo interno%
-public TrieNode insert(String word, int index){
-  if (caracteres.contains(word.charAt(index))){
-    TrieNode nextNode = sons.get(caracteres.indexOf(word.charAt(index)));
-    nextNode.insert(word, index+1);
-  } else {
-    caracteres.add(word.charAt(index));
-    if (word.charAt(index) == '$'){
-      sons.add(new Leaf(word));
-    } else {
-      sons.add(new InnerNode(word, index+1));
-    }
-  }
-  return this;
-}
-
-public InnerNode(String word, int index){
-  this.sons = new ArrayList<TrieNode>();
-  this.caracteres = new ArrayList<Character>();
-  caracteres.add(word.charAt(index));
-  if(word.charAt(index) == '$'){
-    sons.add(new Leaf(word));
-  }
-  else {
-    sons.add(new InnerNode(word, index+1));
-  }
-}
-
-Por último, si intentamos insertar en un nodo hoja, es porque todo el string a insertar coincidía con la palabra guardada en la hoja, y por lo tanto la inserción termina sin haber cambios.
-
-%método inserción en el nodo hoja%
-public TrieNode insert(String word, int index){
-  return this;
-}
-
-public Leaf(String word){
-  this.word = word;
-}
-
-búsqueda en el trie es similar a la inserción, donde el arbol le pasa el trabajo al nodo raíz, pasandole la palabra extendida con el simbolo terminal y un índice (inicializado en 0) que indica el siguiente caracter a inspeccionar de la palabra buscada. Y que cada tipo de nodo implementa esta busqueda de manera diferente.
-El nodo especial entrega falso, pues representa un arbol vacío.
-
-%metodo buscar arbol vacío%
-public Boolean search(String word, int index){
-  return false;
-}
-
-Un nodo interno busca el carácter actual de la palabra en su lista de caracteres, si no está, entrega falso, indicando que la palabra no se encontro. Si está, sigue la busqueda en el siguiente nodo, actualizando el índice para que indique al siguiente caracter de la palabra.
-
-%métdo buscar nodo interior%
-public Boolean search(String word, int index){
-  if (caracteres.contains(word.charAt(index)) ) {
-    TrieNode nextNode = sons.get(caracteres.indexOf(word.charAt(index)));
-    return nextNode.search(word, index+1);
-  }
-  else{
-    return false;
-  }
-}
-
-El nodo hoja entrega verdadero. Indicando que la palabra se encontro.
-
-%método buscar nodo hoja%
-public Boolean search(String word, int index){
-  assert index== word.length();
-  assert index == this.word.length();
-  return true;//return this.word.equal(word);
-}
+INSERCIÓN
+cada instancia de inserción posee dos variables globales, el sufijo a insertar, su pocición en el texto y un índice que indica el resto del string que se está insertando que queda por comparar.
+Partimos de la premisa que sea cual sea la etapa de un ciclo de inserción, debemos situarnos sobre un nodo interno para tomar la decisión de que hacer a continuación, ya sea el nodo interno que representa la raíz, o algún otro nodo interno. Nos referimos con caminos a los substring que representan los pares de índice y largo que llevan del nodo interno actual a los nodos hijos. Así, un camino es el substring Text[i,i+l], con i el índice del camino y l el largo del camino. el string sfx es el sufijo que estamos insertando, y j es su índice asociado. Así, el sufijo sfx=Text[j,n] con n el largo del texto. el string str es lo que nos queda por ver del sufijo siendo insertado, y k es su índice de inicio en sfx. Así str = sfx[k,m], con m el largo de sfx.
+El flujo de inserción es:
+si str = $, es porque debemos insertar una hoja en el nodo actual. el parámetro de la hoja es el índice del inicio del sufijo, y este se consigue en la instancia de inserción.
+si str != $ de modo que k < m, se compara la primera letra de str con la primera letra de cada camino, todo en tiempo O(1).
+  Si no se encuentra ningún camino que coincida en la primera letra con str, entonces se crea la nueva 4-tupla en el nodo actual apuntando a un nuevo nodo y con los valores str[0], j+k, m-1. siendo el primer carácter de str, el índice en el texto y el largo del camino que lleva al nuevo nodo. Una vez creado el nuevo nodo, se actualiza k a m y se procede con la inserción al nuevo nodo. como k=m, str será $, asegurando que en el nuevo nodo se cree una hoja.
+  Si se encuentra un camino, se procede a recuperar el string correspondiente al camino en el texto y se ve cuantos carácteres comparten el camino y str.
+    Si comparten la totalidad del camino, osea, que el camino es un prefijo de str, entonces se avanza k en l unidades, con l el largo del camino, y se procede la inserción en el nodo hijo al que se llega por el camino.
+    Si comparten solo v carácteres entonces creamos un nuevo hijo para remplazar al viejo hijo. El nuevo hijo tiene como hijo al viejo hijo, y lo que permite es separar el camino en dos, la primera parte va del nodo actual al nuevo hijo, usando los primeros v carácteres del antiguo camino, y la segunda parte va del nuevo hijo al antiguo hijo, usando el resto de carácteres del camino antiguo. Como el nuevo hijo tiene de hijo al antiguo hijo, su contador se inicializa en el mismo valor del contador del antiguo hijo. Avanzamos k en v y seguimos con la inserción en el nuevo nodo.

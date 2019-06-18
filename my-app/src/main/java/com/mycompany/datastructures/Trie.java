@@ -38,4 +38,23 @@ public class Trie implements ITrie {
     this.head.accept(searchVisitor);
     return searchVisitor.veredict();
   }
+
+  public int countWord(String word){
+    CountVisitor cvisitor = new CountVisitor(word+'$');
+    this.head.accept(cvisitor);
+    return cvisitor.getCount();
+  }
+
+  public int countPreffix(String word){
+    CountVisitor cvisitor = new CountVisitor(word);
+    this.head.accept(cvisitor);
+    return cvisitor.getCount();
+  }
+
+  public String toString(){
+    String msg = "Trie:\n"+this.head.toString();
+    return msg;
+  }
+
+
 }

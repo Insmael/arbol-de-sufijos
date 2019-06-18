@@ -2,17 +2,13 @@ package com.mycompany.datastructures;
 
 import com.mycompany.visitors.IVisitor;
 
-public class Leaf implements TrieNode {
-  String word;
+public class SLeaf implements TrieNode {
   int count;
+  int posicion;
 
-  public Leaf(String word){
-    this.word = word;
+  public SLeaf(int posicion){
+    this.posicion = posicion;
     this.count =0;
-  }
-
-  public String getWord(){
-    return this.word;
   }
 
   public int getCount(){
@@ -24,11 +20,11 @@ public class Leaf implements TrieNode {
   }
 
   public void accept(IVisitor visitor){
-    visitor.visitLeaf(this);
+    visitor.visitSLeaf(this);
   }
 
   public String toString(){
-    String msg = "Leaf:"+"count:"+this.count+" word:"+this.word;
+    String msg = "SLeaf:"+"count:"+this.count+" posicion:"+this.posicion;
     return msg;
   }
 }

@@ -7,10 +7,17 @@ import java.util.List;
 public class InsertVisitor implements IVisitor{
   String word;
   int index;
+  int posicion;
 
   public InsertVisitor(String word){
     this.word = word+'$';
     this.index = 0;
+  }
+
+  public InsertVisitor(String word, int posicion){
+    this.word = word+'$';
+    this.index = 0;
+    this.posicion = posicion;
   }
 
   public void reset(String word){
@@ -18,8 +25,14 @@ public class InsertVisitor implements IVisitor{
     this.index = 0;
   }
 
+  public void reset(String word, int posicion){
+    this.word = word+'$';
+    this.index = 0;
+    this.posicion = posicion;
+  }
 
   public void visitNode(Node node){
+    node.countsum1();
     List<Character> caminos = node.getCaminos();
     Character chr = word.charAt(index);
     if (caminos.contains(chr) ) {
@@ -41,6 +54,23 @@ public class InsertVisitor implements IVisitor{
   }
 
   public void visitPNode(PNode node){
+    visitPNodeorSNode(node, false);
+  }
+
+  public void visitSNode(SNode node){
+    visitPNodeorSNode(node, true);
+  }
+
+  public void visitLeaf(Leaf node){
+    node.countsum1();
+  }
+
+  public void visitSLeaf(SLeaf node){
+    node.countsum1();
+  }
+
+  void visitPNodeorSNode(PNode node, Boolean isSNode){
+    node.countsum1();
     String rest = word.substring(index);
     List<String> caminos = node.getCaminos();
     List<TrieNode> sons = node.getSons();
@@ -56,7 +86,13 @@ public class InsertVisitor implements IVisitor{
         //length es menor al camino completo
         String newCamino = camino.substring(0,length);
         String restCamino = camino.substring(length, camino.length());
-        PNode newson = new PNode();
+        PNode newson = null;
+        if (isSNode){
+          newson = new SNode();
+        } else {
+          newson = new PNode();
+        }
+        newson.setCount(oldson.getCount());
         newson.getSons().add(oldson);
         newson.getCaminos().add(restCamino);
         caminos.set(idx, newCamino);
@@ -65,22 +101,30 @@ public class InsertVisitor implements IVisitor{
       }
     } else {
       //si no lo contiene y es para crear una hoja.
-      if (word.charAt(index) == '$'){
-        sons.add(new Leaf(word));
+      if (rest.equals("$")){
+        TrieNode leaf = null;
+        if(isSNode){
+          leaf = new SLeaf(posicion);
+        }else {
+          leaf = new Leaf(word);
+        }
+        sons.add(leaf);
         caminos.add("$");
+        leaf.accept(this);
       //si no lo contiene y no es una hoja.
       } else {
-        int subLength = rest.length()-1;
-        TrieNode newNode = new PNode();
-        caminos.add(word.substring(index, subLength));
+        TrieNode newNode = null;
+        if(isSNode) {
+          newNode = new SNode();
+        } else {
+          newNode = new PNode();
+        }
+        int newindex = word.length()-1;
+        caminos.add(word.substring(index, newindex));
         sons.add(newNode);
-        index +=subLength;
+        index = newindex;
         newNode.accept(this);
       }
     }
-  }
-
-  public void visitLeaf(Leaf node){
-    ;
   }
 }

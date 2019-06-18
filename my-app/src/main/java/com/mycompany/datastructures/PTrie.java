@@ -4,10 +4,9 @@ import java.util.List;
 import com.mycompany.visitors.*;
 
 public class PTrie extends Trie implements ITrie {
-  TrieNode head;
 
   public PTrie() {
-    this.head = new PNode();
+    super.head = new PNode();
   }
 
   public PTrie(String word){
@@ -20,9 +19,9 @@ public class PTrie extends Trie implements ITrie {
     this.insert(words);
   }
 
-  public void makeSuffixTree(String text){
-    for (int i=0;i<text.length()-1;i++){
-      this.insert(text.substring(i));
-    }
+  public String toString(){
+    String msg = "PTrie:\n"+super.head.toString();
+    return msg;
   }
+
 }

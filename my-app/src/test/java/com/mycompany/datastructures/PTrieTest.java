@@ -34,6 +34,7 @@ public class PTrieTest
         assertTrue(aPTrie.search(""));
         assertFalse(aPTrie.search("dogo"));
         assertFalse(aPTrie.search("marciano"));
+        assertEquals(1,aPTrie.countPreffix(""));
     }
 
     @Test
@@ -48,7 +49,7 @@ public class PTrieTest
     }
 
     @Test
-    public void listBuildPTrieAllWordsSearch()
+    public void listBuildPTrie()
     {
         PTrie aPTrie = new PTrie();
         List<String> words = new ArrayList<String>();
@@ -72,24 +73,32 @@ public class PTrieTest
     }
 
     @Test
-    public void ManyWordPTriesuffixSearch()
+    public void ManyWordPTrie()
     {
         PTrie aPTrie = new PTrie();
         List<String> words = new ArrayList<String>();
         words.add("dogo");
+        words.add("flavia");
         words.add("canis");
         words.add("mayores");
         words.add("orion");
+        words.add("fla");
         words.add("argonavis");
         words.add("sirio");
         words.add("siracusa");
         words.add("tirano");
-        words.add("casio");
         words.add("flavio");
+        words.add("casio");
+        words.add("flavios");
         aPTrie.insert(words);
         for (String word : words){
           assertTrue(aPTrie.search(word));
         }
+        assertEquals(4,aPTrie.countPreffix("fla"));
+        assertEquals(3,aPTrie.countPreffix("flav"));
+        assertEquals(3,aPTrie.countPreffix("flavi"));
+        assertEquals(2,aPTrie.countPreffix("flavio"));
+        assertEquals(0,aPTrie.countPreffix(""));
         assertFalse(aPTrie.search("sir"));
         assertFalse(aPTrie.search("s"));
         assertFalse(aPTrie.search("a"));
@@ -99,7 +108,7 @@ public class PTrieTest
     }
 
     @Test
-    public void preffixPTriePreffixSearch()
+    public void preffixPTrie()
     {
         PTrie aPTrie = new PTrie();
         List<String> words = new ArrayList<String>();
@@ -111,6 +120,7 @@ public class PTrieTest
         words.add("siracu");
         words.add("siracus");
         aPTrie.insert(words);
+        assertEquals(7,aPTrie.countPreffix("s"));
         for (String word : words){
           assertTrue(aPTrie.search(word));
         }
@@ -118,7 +128,7 @@ public class PTrieTest
     }
 
     @Test
-    public void suffixPTrieSuffixSearch()
+    public void suffixPTrieSearch()
     {
         PTrie aPTrie = new PTrie();
         List<String> words = new ArrayList<String>();
@@ -133,6 +143,8 @@ public class PTrieTest
         for (String word : words){
           assertTrue(aPTrie.search(word));
         }
+        assertTrue(aPTrie.search("iracusa"));
+        assertFalse(aPTrie.search("iracuse"));
         assertFalse(aPTrie.search("usa"));
     }
 
