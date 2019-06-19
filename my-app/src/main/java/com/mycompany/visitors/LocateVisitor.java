@@ -4,11 +4,11 @@ import com.mycompany.datastructures.*;
 import com.mycompany.utils.*;
 import java.util.List;
 
-public class CountVisitor extends Visitor{
+public class LocateVisitor extends Visitor{
   String word;
   int wlength;
   int index;
-  int count;
+  List<int> locations;
 
   public SearchVisitor(String word){
     this.word = word;
@@ -18,12 +18,18 @@ public class CountVisitor extends Visitor{
   }
 
 
-  public int getCount(){
-    return this.contains;
+  public List<int> getLocations(){
+    return this.locations;
+  }
+
+  void visitLeaf(Leaf leaf){
+    this.locations.add(leaf.getPos());
   }
 
   void inprefix(Node node){
-    this.count = node.getCount();
+    for (Camino camino: node.getCaminos()){
+      camino.getNode().accept(this);
+    }
   }
 
   void nomatch(Node node){
@@ -32,9 +38,10 @@ public class CountVisitor extends Visitor{
 
   void pathpartialmatch(Camino camino, int shared){
     if (this.index == this.wlength-1){
+      //si se consumio por completo la palabra buscada
       camino.getNode().accept(this);
     } else {
-      this.contains = false;
+      ;
     }
   }
 }

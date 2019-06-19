@@ -1,35 +1,39 @@
 package com.mycompany.datastructures;
 
-import java.util.List;
-import com.mycompany.visitors.*;
+import java.utils.Arrayist;
+import java.utils.List;
 
-public class STrie extends Trie implements ITrie {
+class STrie {
+  INode head;
 
-  public STrie() {
-    super.head = new SNode();
+  public STrie(){
+    head = Node();
   }
 
-  public STrie(String text){
-    this();
-    InsertVisitor insertVisitor = new InsertVisitor("dummyWord");
-    String word = "dummyWord";
-    for (int i=0;i<text.length()-1;i++){
-      word = text.substring(i);
-      insertVisitor.reset(word, i);
-      this.head.accept(insertVisitor);
+  public void build(String text){
+    for (int i=0;i<text.length();i++){
+      this.insert(text.substring(i));
     }
   }
 
-  public void insert(String word){
+  public void insert(String sufix){
     ;
   }
 
-  public void insert(List<String> words){
-    ;
+  public Boolean search(String prefix){
+    return false;
   }
 
-  public String toString(){
-    String msg = "STrie:\n"+super.head.toString();
-    return msg;
+  public int count(String prefix){
+    return 0;
+  }
+
+  public List<Integer> locate(String prefix){
+    return null;
+  }
+
+  public List<String> topkq(int k, int q){
+    return null;
+
   }
 }

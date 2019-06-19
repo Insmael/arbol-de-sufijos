@@ -1,42 +1,49 @@
 package com.mycompany.datastructures;
 
-import com.mycompany.visitors.IVisitor;
-import java.util.ArrayList;
-import java.util.List;
+import java.utils.Arrayist;
+import java.utils.List;
 
-public class Node implements TrieNode {
-  List<TrieNode> sons;
-  List<Character> caminos;
-  int count;
+class Node implements INode {
+    List<Camino> caminos;
+    int counter;
 
-  public Node(){
-    this.sons = new ArrayList<TrieNode>();
-    this.caminos = new ArrayList<Character>();
-    this.count = 0;
-  }
+    public Node(){
+      this.caminos = new ArrayList<Camino>();
+      this.counter = 0;
+    }
 
-  public List<TrieNode> getSons(){
-    return this.sons;
-  }
+    public Node(Camino camino){
+      this.caminos = new ArrayList<Camino>(camino);
+      this.counter = 0;
+      //caminos.add(camino);
+    }
 
-  public List<Character> getCaminos(){
-    return this.caminos;
-  }
+    Node(List<Camino> lcaminos){
+      this.caminos = new ArrayList<Camino>(lcaminos);
+      this.counter = 0;
+    }
 
-  public int getCount(){
-    return this.count;
-  }
+    public int getCounter(){
+      return this.counter;
+    }
 
-  public void accept(IVisitor visitor){
-    visitor.visitNode(this);
-  }
+    public List<Caminos> getCaminos(){
+      return this.caminos;
+    }
 
-  public void countsum1(){
-    this.count+=1;
-  }
+    public void addCamino(Camino camino){
+      this.caminos.add(camino);
+    }
 
-  public String toString(){
-    String msg = "Node:\n"+"count:"+this.count+" ways:"+this.caminos+"\nsons:"+this.sons;
-    return msg;
-  }
+    public int setCounter(int value){
+      this.counter = value;
+    }
+
+    public void plus1(){
+      this.counter+=1;
+    }
+
+    public void accept(Visitor visitor){
+      visitor.visitNode(this);
+    }
 }

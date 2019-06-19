@@ -1,8 +1,9 @@
 La estructura del arbol de sufijos posee tanto nodos internos como nodos hojas.
 cada tipo de nodo siendo representado por una clase. facilitando la separcación de los datos y los procedimientos de cada una.
 para evitar el recorrer subárboles en búsquedas o cálculos, en cada nodo se guarda una lista de 4-tuplas asociados, un puntero a un nodo, un carácter, un índice y un largo. Cada 4-tupla representa un nodo hijo y el camino que lleva a el, y la lista de las 4-tuplas es la lista de todos los nodos hijos y sus respectivos caminos que nacen de un nodo interno. el carácter de la 4-tupla es el primer carácter del camino, el índice indica la posición del camino en el texto, y el largo indica el total de carácteres que pertenecen al camino. Son a lo más $|\sigma| +1$ hijos por nodo, lo que requiere O(1) para la lista de 4-tupla por nodo. Al ser a lo más O(n) nodos, se necesita O(n) de espacio para esta estructura.
+Cada hoja guarda un indice que representa el inicio de su sufijo en el texto.
 Sea S el conjunto de n sufijos del texto usado para crear el arbol de sufijos, y sea len(i) el largo del sufijo i del conjunto S, con 0<i<=n-1. Entonces como todos los sufijos tienen diferente largo, cada string s de S es único y se inserta una sola vez en el arbol de sufijos.
-Como cada string se inserta una sola vez, y cada hoja representa un string insertado, entonces el nodo hoja no necesita llevar la cuenta de cuantas veces se ha insertado el string al que corresponde, pues si existe es que es uno, y si no existe es que es cero. Basta con tener un solo valor en el, el índice que apunta al inicio del string al que corresponde en el texto completo. Si el texto es de largo m, entonces el numero de sufijos n = m, y al haber un nodo por cada sufijo, con cada hoja ocupando un espacio O(1), y una hoja por sufijo, el espacio total utilizado por las hojas es de O(n).
+Como cada string se inserta una sola vez, y cada hoja representa un string insertado, entonces el nodo hoja no necesita llevar la cuenta de cuantas veces se ha insertado el string al que corresponde, pues si existe es que es uno, y si no existe es que es cero. Basta con tener un solo valor en el, el índice que apunta al inicio del string al que corresponde en el texto completo. Si el texto es de largo m, entonces el numero de sufijos n = m, y al haber un nodo hoja por cada sufijo, con cada hoja ocupando un espacio O(1), y una hoja por sufijo, el espacio total utilizado por las hojas es de O(n).
 Para lograr un conteo de prefijos más rápido, en cada nodo interno también se guarda el número de string que lo poseen como prefijo. Como ejemplo, si un nodo interno tiene como hijos dos hojas y nada más. Entonces el contador de aquel nodo interno es dos, pues se han insertado dos string que lo tienen como prefijo. Si en cambio tenemos otro nodo interno con dos hijos como los nodos internos descritos recien, entonces este nuevo nodo interno tiene su contador en cuatro, reflejando las cuatro hojas que le siguen, dos por cada nodo interno que es su hijo. Ahora, como son a lo más O(n) nodos internos en un arbol de sufijos de un texto de largo n (que es el mísmo numero de sufijos que posee el arbol de sufijos), entonces, con un número extra en cada nodo agrega O(n) extra de espacio.
 El número de punteros de cada nodo interno a sus hijos es a lo más |\sigma|+1 con \sigma el conjunto de caractéres del texto, el espacio requerido por nodo es de O(1), y al ser a lo más O(n) nodos, el espacio requerido total es de O(n).
 Luego, el completo de la estructura del arbol requiere de O(n) de espacio total.
@@ -13,12 +14,45 @@ Las consultas sobre el arbol (y el armado del arbol) se implementan usando el vi
 Todas las consultas requieren de un texto sobre el que trabajar, y el arbol de sufijos asociado, de modo que todas las instancias de consultas guardan un puntero al texto asociado al arbol de sufijos. De esta forma, al necesitar saber el suffijo o prefijo asociado a un nodo, se recuperan los indices y largos en los nodos, y luego con estos se busca el correspondiente subtring en el texto para hacer los cálculos. En esta sección se refiere al string texto como Text, que es de largo n, y tiene el carácter terminal "$". de modo que un sufijo que tenga índice asociado r corresponde a Text[r,n]
 
 INSERCIÓN
-cada instancia de inserción posee dos variables globales, el sufijo a insertar, su pocición en el texto y un índice que indica el resto del string que se está insertando que queda por comparar.
+cada instancia de inserción posee tres variables globales, el sufijo a insertar, su pocición en el texto y un índice que indica el resto del string que se está insertando que queda por comparar.
 Partimos de la premisa que sea cual sea la etapa de un ciclo de inserción, debemos situarnos sobre un nodo interno para tomar la decisión de que hacer a continuación, ya sea el nodo interno que representa la raíz, o algún otro nodo interno. Nos referimos con caminos a los substring que representan los pares de índice y largo que llevan del nodo interno actual a los nodos hijos. Así, un camino es el substring Text[i,i+l], con i el índice del camino y l el largo del camino. el string sfx es el sufijo que estamos insertando, y j es su índice asociado. Así, el sufijo sfx=Text[j,n] con n el largo del texto. el string str es lo que nos queda por ver del sufijo siendo insertado, y k es su índice de inicio en sfx. Así str = sfx[k,m], con m el largo de sfx.
+
 El flujo de inserción es:
+
 si str = $, es porque debemos insertar una hoja en el nodo actual. el parámetro de la hoja es el índice del inicio del sufijo, y este se consigue en la instancia de inserción.
 si str != $ de modo que k < m, se compara la primera letra de str con la primera letra de cada camino, todo en tiempo O(1).
+
   Si no se encuentra ningún camino que coincida en la primera letra con str, entonces se crea la nueva 4-tupla en el nodo actual apuntando a un nuevo nodo y con los valores str[0], j+k, m-1. siendo el primer carácter de str, el índice en el texto y el largo del camino que lleva al nuevo nodo. Una vez creado el nuevo nodo, se actualiza k a m y se procede con la inserción al nuevo nodo. como k=m, str será $, asegurando que en el nuevo nodo se cree una hoja.
+
   Si se encuentra un camino, se procede a recuperar el string correspondiente al camino en el texto y se ve cuantos carácteres comparten el camino y str.
+
     Si comparten la totalidad del camino, osea, que el camino es un prefijo de str, entonces se avanza k en l unidades, con l el largo del camino, y se procede la inserción en el nodo hijo al que se llega por el camino.
-    Si comparten solo v carácteres entonces creamos un nuevo hijo para remplazar al viejo hijo. El nuevo hijo tiene como hijo al viejo hijo, y lo que permite es separar el camino en dos, la primera parte va del nodo actual al nuevo hijo, usando los primeros v carácteres del antiguo camino, y la segunda parte va del nuevo hijo al antiguo hijo, usando el resto de carácteres del camino antiguo. Como el nuevo hijo tiene de hijo al antiguo hijo, su contador se inicializa en el mismo valor del contador del antiguo hijo. Avanzamos k en v y seguimos con la inserción en el nuevo nodo.
+
+    Si comparten solo v carácteres entonces creamos un nuevo hijo para remplazar al viejo hijo. El nuevo hijo tiene como hijo al viejo hijo, y lo que permite es separar el camino en dos, la primera parte va del nodo actual al nuevo hijo, usando los primeros v carácteres del antiguo camino, y la segunda parte va del nuevo hijo al antiguo hijo, usando el resto de carácteres del camino antiguo. Como el nuevo hijo tiene de hijo al antiguo hijo, su contador se inicializa en el mismo valor del contador del antiguo hijo. hacemos k += v y seguimos con la inserción en el nuevo nodo.
+
+Respecto al tiempo requerido para insertar una palabra de largo l, se requieren comparar a lo más l carácteres con los carácteres en los nodos, y durante el trayecto, a lo más se cargan N carácteres del texto, con N el número de carácteres del texto. el número de comparaciones necesarias es de a lo más l. de modo que el tiempo necesario es O(N). Si se hubiese mantenido el string de cada camino en cada nodo, entonces al insertar la palabra de largo l no se necesitan cargar carácteres del texto, de modo que el tiempo sería O(l). La diferencia radica en el espacio necesario para guardar cada camino en los nodos. Ya con tener un único camino de la raíz a una hoja, con todo el texto como camino, necesitamos O(N) estra de espacio, y el arbol de sufijos tiene varios, muchos más caminos. Se decidio utilizar un proceso de inserción más lento a cambio de tener una estructura más liviana.
+
+BUSQUEDA
+la búsqueda de un string requiere como variables de instancia un acceso al texto, una palabra y un índice para ir recorriendo la palabra de carácter por carácter. sea la palabra de búsqueda pfx, de largo l, y el índice asociado sea i, entonces el flujo de búsqueda es:
+Si estamos en una hoja, necesariamente el índice apunta al último caracter de pfx, que debe ser un $. como el completo del prefijo fue comparado y se encontraba en el arbol, se entrega verdadero sin hacer cálculos.
+
+Si estamos en un nodo interno:
+
+  Si se nos acaba el pfx, osea, i = l, es porque estamos en el nodo que representa al prefijo. Terminamos devolviendo verdadero.
+
+  Si i<l, buscamos pfx[i] en los primeros carácteres de los caminos, si no está la busqueda termina entregando falso. Si está, cargamos su palabra en memoria, y damos paso a los siguientes casos.
+
+  Si el resto del prefijo (que es pfx[i,l]) está contenido en el camino, la búsqueda termina entregando verdadero.
+
+    Si solo coinciden en v carácteres, siendo v menor al largo del camino, entonces el prefijo no se encuentra, devolviendo falso.
+
+    Si coincide el camino completo con un prefijo de pfx[i,l], entonces i se avanza l, el largo del camino, y se sigue con la búsqueda en el nodo al que lleva el camino.
+
+CONTEO
+el contéo es análogo a la búsqueda, solo que en vez de devolver falso, se devuelve 0 (osea, ningún prefijo en el arbol), y en vez de devolver verdadero, devuelve el contador del nodo en el que termina en los nodos internos, y 1 en las hojas.
+
+LOCALIZAR
+similar a la búsqueda, en vez de devolver falso, devuelve una lista vacía. Si termina en una hoja en vez de devolver verdadero devuelve una lista con su índice de inicio de sufijo en el texto, osea una lista con un único valor. Si termina en un nodo interno, entonces recorre todas las hojas que se puedan alcanzar de aquel nodo y las devuelve en una lista.
+
+TOP-Q-K
+Para conseguir los K strings de largo Q que se recorren más veces, hay que bajar por todas las ramas del arbol, hasta acumular q o más carácteres al construir un string con los caminos que se cruzan para bajar hacia los demás nodos. Una vez se cumple la condición, si hay menos de k string guardados en la instancia, se guarda tanto el contador del nodo, como el string formado. Al ser una sola instancia la que produce la respuesta, una vez que el procedimieno sale de un nodo, debe eliminar el camino devuelto de la palabra que se va formando, pudiendo reutilizar la misma palabra para todos los nodos hijos del nodo actual, lo anterior válido para todos los nodos.

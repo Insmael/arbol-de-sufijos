@@ -1,34 +1,13 @@
 package com.mycompany.datastructures;
 
-import com.mycompany.visitors.IVisitor;
+class Leaf implements INode {
+  int pos;
 
-public class Leaf implements TrieNode {
-  String word;
-  int count;
+  public Leaf(int pos){this.pos = pos;}
+  public int getPos(){return this.pos;}
+  public void setPos(int pos){this.pos = pos;}
 
-  public Leaf(String word){
-    this.word = word;
-    this.count =0;
-  }
-
-  public String getWord(){
-    return this.word;
-  }
-
-  public int getCount(){
-    return this.count;
-  }
-
-  public void countsum1(){
-    this.count+=1;
-  }
-
-  public void accept(IVisitor visitor){
+  public void accept(Visitor visitor){
     visitor.visitLeaf(this);
-  }
-
-  public String toString(){
-    String msg = "Leaf:"+"count:"+this.count+" word:"+this.word;
-    return msg;
   }
 }
