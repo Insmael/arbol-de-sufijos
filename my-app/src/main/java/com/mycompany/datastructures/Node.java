@@ -1,9 +1,10 @@
 package com.mycompany.datastructures;
 
-import java.utils.Arrayist;
-import java.utils.List;
+import com.mycompany.visitors.IVisitor;
+import java.util.ArrayList;
+import java.util.List;
 
-class Node implements INode {
+public class Node implements INode {
     List<Camino> caminos;
     int counter;
 
@@ -13,7 +14,8 @@ class Node implements INode {
     }
 
     public Node(Camino camino){
-      this.caminos = new ArrayList<Camino>(camino);
+      this.caminos = new ArrayList<Camino>();
+      caminos.add(camino);
       this.counter = 0;
       //caminos.add(camino);
     }
@@ -27,7 +29,7 @@ class Node implements INode {
       return this.counter;
     }
 
-    public List<Caminos> getCaminos(){
+    public List<Camino> getCaminos(){
       return this.caminos;
     }
 
@@ -35,7 +37,7 @@ class Node implements INode {
       this.caminos.add(camino);
     }
 
-    public int setCounter(int value){
+    public void setCounter(int value){
       this.counter = value;
     }
 
@@ -43,7 +45,11 @@ class Node implements INode {
       this.counter+=1;
     }
 
-    public void accept(Visitor visitor){
+    public void accept(IVisitor visitor){
       visitor.visitNode(this);
+    }
+
+    public String toString(){
+      return "node:counter:"+this.counter+"|caminos->"+this.caminos;
     }
 }

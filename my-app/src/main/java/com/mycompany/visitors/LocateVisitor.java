@@ -1,33 +1,33 @@
 package com.mycompany.visitors;
 
 import com.mycompany.datastructures.*;
-import com.mycompany.utils.*;
 import java.util.List;
+import java.util.ArrayList;
 
-public class LocateVisitor extends Visitor{
-  String word;
-  int wlength;
-  int index;
-  List<int> locations;
+public class LocateVisitor extends Visitor implements IVisitor{
+  List<Integer> locations;
 
-  public SearchVisitor(String word){
-    this.word = word;
-    this.wlength = word.length();
-    this.index = 0;
-    this.count = 0;
+  public LocateVisitor(String text, String word){
+    super(text,word);
+    this.locations = new ArrayList<Integer>();
+  }
+
+  public void reset(String word){
+    this.locations.clear();
+    super.reset(word);
   }
 
 
-  public List<int> getLocations(){
+  public List<Integer> getLocations(){
     return this.locations;
   }
 
-  void visitLeaf(Leaf leaf){
-    this.locations.add(leaf.getPos());
+  public void visitLeaf(Leaf node){
+    this.locations.add(node.getPos());
   }
 
   void inprefix(Node node){
-    for (Camino camino: node.getCaminos()){
+    for (Camino camino : node.getCaminos()){
       camino.getNode().accept(this);
     }
   }

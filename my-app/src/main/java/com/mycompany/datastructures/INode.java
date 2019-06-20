@@ -1,5 +1,9 @@
 package com.mycompany.datastructures;
 
-interface Node {
-  public abstract void accept(Visitor visitor);
+import com.mycompany.visitors.IVisitor;
+
+public interface INode {
+  public abstract void accept(IVisitor visitor);
+  public abstract int getCounter();
+  public abstract void setCounter(int value);
 }

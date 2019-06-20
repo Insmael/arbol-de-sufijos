@@ -1,29 +1,23 @@
 package com.mycompany.visitors;
 
 import com.mycompany.datastructures.*;
-import com.mycompany.utils.*;
 import java.util.List;
 
-public class CountVisitor extends Visitor{
-  String word;
-  int wlength;
-  int index;
+public class CountVisitor extends Visitor implements IVisitor{
   int count;
 
-  public SearchVisitor(String word){
-    this.word = word;
-    this.wlength = word.length();
-    this.index = 0;
+  public CountVisitor(String text, String word){
+    super(text,word);
     this.count = 0;
   }
 
 
   public int getCount(){
-    return this.contains;
+    return this.count;
   }
 
   void inprefix(Node node){
-    this.count = node.getCount();
+    this.count = node.getCounter();
   }
 
   void nomatch(Node node){
@@ -34,7 +28,7 @@ public class CountVisitor extends Visitor{
     if (this.index == this.wlength-1){
       camino.getNode().accept(this);
     } else {
-      this.contains = false;
+      ;
     }
   }
 }

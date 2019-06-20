@@ -1,22 +1,20 @@
 package com.mycompany.visitors;
 
 import com.mycompany.datastructures.*;
-import com.mycompany.utils.*;
 import java.util.List;
 
-public class SearchVisitor extends Visitor{
-  String word;
-  int wlength;
-  int index;
+public class SearchVisitor extends Visitor implements IVisitor{
   Boolean contains;
 
-  public SearchVisitor(String word){
-    this.word = word;
-    this.wlength = word.length();
-    this.index = 0;
+  public SearchVisitor(String text, String word){
+    super(text, word);
     this.contains = false;
   }
 
+  public void reset(String word){
+    this.contains = false;
+    super.reset(word);
+  }
 
   public Boolean veredict(){
     return this.contains;
@@ -30,12 +28,8 @@ public class SearchVisitor extends Visitor{
     this.contains = false;
   }
 
-  void pathfullmatch(Camino camino){
-    camino.getNode().accept(this);
-  }
-
   void pathpartialmatch(Camino camino, int shared){
-    if (this.index == this.wlength-1){
+    if (this.index == this.wlength){
       this.contains = true;
     } else {
       this.contains = false;
