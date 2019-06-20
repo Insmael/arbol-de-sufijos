@@ -25,7 +25,7 @@ public class Visitor implements IVisitor{
   public void visitLeaf(Leaf node){;}
 
   public void visitNode(Node node){
-    if(this.index >= this.wlength-1){
+    if(this.index == this.wlength){
       this.inprefix(node);
     } else {
       List<Camino> caminos = node.getCaminos();
