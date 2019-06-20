@@ -16,9 +16,13 @@ public class TopVisitor implements IVisitor{
   public void reset(int k, int q){
     this.k = k;
     this.q = q;
+    this.word = "";
+    pfxs.clear();
+    ocurs.clear();
   }
 
   public TopVisitor(String text, int k, int q){
+    this.text = text;
     this.k = k;
     this.q = q;
     this.word = "";
@@ -27,25 +31,28 @@ public class TopVisitor implements IVisitor{
   }
 
   public List<String> getTop(){
-    return this.pfxs;
+    return new ArrayList<String> (this.pfxs);
   }
 
-  public void visitLeaf(Leaf leaf){;}
+  public void visitLeaf(Leaf node){
+    int wl = this.word.length()-1;
+    if(wl >= this.q){
+      this.rearrange(this.word.substring(0,this.q), node.getCounter(), 0);
+    }
+  }
 
   public void visitNode(Node node){
     int wl = this.word.length();
     if(wl >= this.q){
-      this.rearrange(this.word, node.getCounter(), 0);
+      this.rearrange(this.word.substring(0,this.q), node.getCounter(), 0);
     } else {
-      if (wl < this.q) {
-        for(Camino camino : node.getCaminos()){
-          int idx = camino.getIndex();
-          int l = camino.getLength();
-          String infix = this.text.substring(idx,idx+l);
-          this.word.concat(infix);
-          camino.getNode().accept(this);
-          this.word = this.word.substring(0,wl);
-        }
+      for(Camino camino : node.getCaminos()){
+        int idx = camino.getIndex();
+        int l = camino.getLength();
+        String infix = this.text.substring(idx,idx+l);
+        this.word = this.word.concat(infix);
+        camino.getNode().accept(this);
+        this.word = this.word.substring(0,wl);
       }
     }
   }
@@ -58,12 +65,12 @@ public class TopVisitor implements IVisitor{
       } else {
         String s = this.pfxs.get(i);
         this.ocurs.set(i, ncount);
-        this.pfxs.set(i,word);
+        this.pfxs.set(i,new String(word));
         rearrange(s,num,i+1);
       }
     } else {
       if (i<this.k+1){
-        this.pfxs.add(word);
+        this.pfxs.add(new String(word));
         this.ocurs.add(ncount);
       }
     }

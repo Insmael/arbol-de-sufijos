@@ -49,7 +49,7 @@ public class STrie {
     return lvstr.getLocations();
   }
 
-  public List<String> topkq(int k, int q){
+  public List<String> top(int k, int q){
     tvstr.reset(k,q);
     head.accept(tvstr);
     return tvstr.getTop();
