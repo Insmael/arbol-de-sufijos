@@ -37,7 +37,7 @@ public class LocateVisitor extends Visitor implements IVisitor{
   }
 
   void pathpartialmatch(Camino camino, int shared){
-    if (this.index == this.wlength-1){
+    if (this.index == this.wlength){
       //si se consumio por completo la palabra buscada
       camino.getNode().accept(this);
     } else {
