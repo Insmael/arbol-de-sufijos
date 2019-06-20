@@ -24,8 +24,12 @@ public class CountVisitor extends Visitor implements IVisitor{
     ;//se mantiene el contador en 0
   }
 
+  public void visitLeaf(Leaf node){
+    this.count = node.getCounter();
+  }
+
   void pathpartialmatch(Camino camino, int shared){
-    if (this.index == this.wlength-1){
+    if (this.index == this.wlength){
       camino.getNode().accept(this);
     } else {
       ;

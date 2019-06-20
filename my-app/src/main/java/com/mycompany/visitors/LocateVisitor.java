@@ -33,7 +33,7 @@ public class LocateVisitor extends Visitor implements IVisitor{
   }
 
   void nomatch(Node node){
-    ;//se mantiene el contador en 0
+    this.locations.add(-1);
   }
 
   void pathpartialmatch(Camino camino, int shared){
