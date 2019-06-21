@@ -27,7 +27,8 @@ public class InsertVisitorTest
      {
        String text = "aaaaa";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(st.search(text.substring(i)));
        }
      }
@@ -37,7 +38,8 @@ public class InsertVisitorTest
      {
        String text = "abab";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(st.search(text.substring(i)));
        }
      }
@@ -47,7 +49,8 @@ public class InsertVisitorTest
      {
        String text = "abac";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(st.search(text.substring(i)));
        }
      }
@@ -57,7 +60,8 @@ public class InsertVisitorTest
      {
        String text = "aabaac";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(st.search(text.substring(i)));
        }
      }
@@ -67,7 +71,8 @@ public class InsertVisitorTest
     {
       String text = "eran las 5 e la mañana, y blablabla para un sueño";
       STrie st = new STrie(text+"$");
-      for(int i=0;i<text.length();i++){
+      for(int i=0;i<text.length();i++)
+      {
         assertTrue(st.search(text.substring(i)));
       }
     }

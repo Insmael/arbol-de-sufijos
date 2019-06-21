@@ -28,7 +28,8 @@ public class SearchVisitorTest
        String text =  "aaaaa";
        String text2 = "bbbbb";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text2.length();i++){
+       for(int i=0;i<text2.length();i++)
+       {
          assertFalse(st.search(text2.substring(i)));
          assertTrue(st.search(text.substring(i)));
        }
@@ -39,11 +40,13 @@ public class SearchVisitorTest
      {
        String text = "aaaaa";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(st.search(text.substring(i)));
        }
        String text2 = "abababab";
-       for(int i=0;i<text2.length();i++){
+       for(int i=0;i<text2.length();i++)
+       {
          assertFalse(st.search(text2.substring(i)));
        }
      }
@@ -53,7 +56,8 @@ public class SearchVisitorTest
      {
        String text = "procura coquetearme maaas";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(st.search(text.substring(i)));
        }
        assertTrue(st.search(""));
@@ -68,7 +72,8 @@ public class SearchVisitorTest
          assertTrue(st.search(text.substring(i)));
        }
        String text2 = text + "y no reparo de lo que te hareee";
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertFalse(st.search(text2.substring(i)));
        }
      }

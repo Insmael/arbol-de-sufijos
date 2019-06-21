@@ -28,7 +28,8 @@ public class CountVisitorTest
      {
        String text = "aaaaa";
        STrie st = new STrie(text+"$");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertEquals(i+1,st.count(text.substring(i)));
        }
      }

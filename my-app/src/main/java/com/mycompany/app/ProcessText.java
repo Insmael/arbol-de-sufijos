@@ -19,7 +19,8 @@ public class ProcessText
       pp.addStrToRemove("\n");
       text = pp.removeRegex(text);
       String toStore="";
-      for(int i =10;i<=23;i++){
+      for(int i =10;i<=23;i++)
+      {
         toStore = pp.toPowerOfTwoLength(text,i);
         IO.saveProcessedDNA(toStore,i);
       }
@@ -30,13 +31,11 @@ public class ProcessText
       pp.defaultTextSet();
       text = pp.removeRegex(text);
       text = pp.compressSpaces(text);
-      for(int i =10;i<=23;i++){
+      for(int i =10;i<=23;i++)
+      {
         toStore = pp.toPowerOfTwoLength(text,i);
         IO.saveProcessedEnglish(toStore,i);
       }
       System.out.println("Preprocesado de los textos terminado exitosamente.");
-
-
-
     }
 }

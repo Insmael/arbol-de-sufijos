@@ -41,12 +41,17 @@ public class TopVisitor implements IVisitor{
     }
   }
 
-  public void visitNode(Node node){
+  public void visitNode(Node node)
+  {
     int wl = this.word.length();
-    if(wl >= this.q){
+    if(wl >= this.q)
+    {
       this.rearrange(this.word.substring(0,this.q), node.getCounter(), 0);
-    } else {
-      for(Camino camino : node.getCaminos()){
+    }
+    else
+    {
+      for(Camino camino : node.getCaminos())
+      {
         int idx = camino.getIndex();
         int l = camino.getLength();
         String infix = this.text.substring(idx,idx+l);
@@ -57,19 +62,27 @@ public class TopVisitor implements IVisitor{
     }
   }
 
-  public void rearrange(String word, int ncount, int i){
-    if(i<this.pfxs.size()){
+  public void rearrange(String word, int ncount, int i)
+  {
+    if(i<this.pfxs.size())
+    {
       int num = this.ocurs.get(i);
-      if(ncount<num){
+      if(ncount<num)
+      {
         rearrange(word, ncount, i+1);
-      } else {
+      }
+      else
+      {
         String s = this.pfxs.get(i);
         this.ocurs.set(i, ncount);
         this.pfxs.set(i,new String(word));
         rearrange(s,num,i+1);
       }
-    } else {
-      if (i<this.k+1){
+    }
+    else
+    {
+      if (i<this.k+1)
+      {
         this.pfxs.add(new String(word));
         this.ocurs.add(ncount);
       }

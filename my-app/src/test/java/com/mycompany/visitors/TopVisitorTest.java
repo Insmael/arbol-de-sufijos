@@ -32,7 +32,8 @@ public class TopVisitorTest
        String text =  "aaaaa";
        STrie st = new STrie(text+"$");
        List<String> result;
-       for (int i=1;i<text.length();i++){
+       for (int i=1;i<text.length();i++)
+       {
          result = st.top(1,i);
          assertTrue(result.contains(text.substring(text.length()-i)));
          assertEquals(1,result.size());

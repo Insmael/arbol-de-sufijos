@@ -41,7 +41,8 @@ public class App
       System.out.println("Consultas Locate");
       nconsultas=0;
       crn.tic();
-      for(String word :words){
+      for(String word :words)
+      {
         st.locate(word);
         nconsultas++;
       }
@@ -59,8 +60,10 @@ public class App
       qs.add(6);
       qs.add(7);
       System.out.println("Consultas Top");
-      for(Integer k: ks){
-        for (Integer q:qs){
+      for(Integer k: ks)
+      {
+        for (Integer q:qs)
+        {
           crn.tic();
           st.top(k,q);
           crn.tac("top-"+k+"-"+q);
@@ -68,8 +71,6 @@ public class App
           System.out.println("tiempo requerido: "+crn.getLastTime());
         }
       }
-
-
       //mostrar los resultados
       //graficar los resultados
     }

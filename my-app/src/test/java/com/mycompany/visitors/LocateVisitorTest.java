@@ -31,7 +31,8 @@ public class LocateVisitorTest
        String text =  "aaaaa";
        STrie st = new STrie(text+"$");
        List<Integer> result = st.locate("a");
-       for (int i=0;i<text.length();i++){
+       for (int i=0;i<text.length();i++)
+       {
          assertTrue(result.contains(i));
        }
 
@@ -43,11 +44,13 @@ public class LocateVisitorTest
        String text =  "abababababab";
        STrie st = new STrie(text+"$");
        List<Integer> result = st.locate("a");
-       for (int i=0;i<text.length();i+=2){
+       for (int i=0;i<text.length();i+=2)
+       {
          assertTrue(result.contains(i));
        }
        result = st.locate("b");
-       for (int i=1;i<text.length();i+=2){
+       for (int i=1;i<text.length();i+=2)
+       {
          assertTrue(result.contains(i));
        }
      }
@@ -69,7 +72,8 @@ public class LocateVisitorTest
        String text =  "una noche en la playa owoo, vamoh a pasarla bien, de esta no te salvas, o nooo, vamoh a pasarla bien";
        STrie st = new STrie(text+"$");
        List<Integer> result = st.locate("");
-       for(int i=0;i<text.length();i++){
+       for(int i=0;i<text.length();i++)
+       {
          assertTrue(result.contains(i));
        }
      }

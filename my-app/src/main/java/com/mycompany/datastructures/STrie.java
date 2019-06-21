@@ -4,7 +4,8 @@ import com.mycompany.visitors.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class STrie {
+public class STrie
+{
   INode head;
   String text;
   InsertVisitor ivstr;
@@ -14,7 +15,8 @@ public class STrie {
   TopVisitor tvstr;
 
 
-  public STrie(String text){
+  public STrie(String text)
+  {
     this.text = text;
     this.head = new Node();
     this.ivstr = new InsertVisitor(text,0);
@@ -23,7 +25,8 @@ public class STrie {
     this.lvstr = new LocateVisitor(text,"");
     this.tvstr = new TopVisitor(text,0,0);
     System.out.println("el arbol contendrá "+text.length()+" sufijos.");
-    for (int i=0;i<text.length()-1;i++){
+    for (int i=0;i<text.length()-1;i++)
+    {
       ivstr.reset(i);
       //System.out.println("insertando sufijo n:"+i);
       this.head.accept(ivstr);
@@ -31,31 +34,36 @@ public class STrie {
     }
   }
 
-  public Boolean search(String prefix){
+  public Boolean search(String prefix)
+  {
     svstr.reset(prefix);
     head.accept(svstr);
     return svstr.veredict();
   }
 
-  public int count(String prefix){
+  public int count(String prefix)
+  {
     cvstr.reset(prefix);
     head.accept(cvstr);
     return cvstr.getCount();
   }
 
-  public List<Integer> locate(String prefix){
+  public List<Integer> locate(String prefix)
+  {
     lvstr.reset(prefix);
     head.accept(lvstr);
     return lvstr.getLocations();
   }
 
-  public List<String> top(int k, int q){
+  public List<String> top(int k, int q)
+  {
     tvstr.reset(k,q);
     head.accept(tvstr);
     return tvstr.getTop();
   }
 
-  public String toString(){
+  public String toString()
+  {
     return "STrie: head->"+this.head.toString();
   }
 }
