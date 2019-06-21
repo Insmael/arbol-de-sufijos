@@ -50,19 +50,12 @@ public class App
       res = crn.getLastTime()/nconsultas;
       System.out.println("tiempo requerido: "+crn.getLastTime());
       System.out.println("tiempo requerido por consulta: "+res);
-      List<Integer> ks = new ArrayList<Integer>();
-      List<Integer> qs = new ArrayList<Integer>();
-      ks.add(3);
-      ks.add(5);
-      ks.add(10);
-      qs.add(4);
-      qs.add(5);
-      qs.add(6);
-      qs.add(7);
+      int[] ks  = {3,5,10};
+      int[] eng_qs = {4,5,6,7};
       System.out.println("Consultas Top");
-      for(Integer k: ks)
+      for(int k : ks)
       {
-        for (Integer q:qs)
+        for (int q : eng_qs)
         {
           crn.tic();
           st.top(k,q);

@@ -41,14 +41,16 @@ public class Visitor implements IVisitor
       int shared=0;
       int idx = -1;
       int l = -1;
+      String wordcamino = "";
       for (Camino camino : node.getCaminos())
       {
         shared = 0;
         idx = camino.getIndex();
         l = camino.getLength();
+        wordcamino = this.text.substring(idx,idx+l);
         for(; shared<l && shared<this.wlength-this.index;shared++)
         {
-          if (!this.equalCharAt(shared,idx))
+          if (this.word.charAt(this.index+shared) != wordcamino.charAt(shared))
           {
             break;
           }
@@ -67,16 +69,7 @@ public class Visitor implements IVisitor
           break;
         }
       }
-      if(shared==0)
-      {
-        this.nomatch(node);
-      }
     }
-  }
-
-  Boolean equalCharAt(int offset, int pfxIndex)
-  {
-    return this.word.charAt(this.index+offset) == this.text.charAt(pfxIndex+offset);
   }
 
   void inprefix(Node node)
@@ -84,10 +77,6 @@ public class Visitor implements IVisitor
     ;
   }
 
-  void nomatch(Node node)
-  {
-    ;
-  }
   void pathpartialmatch(Camino camino, int shared)
   {
     ;

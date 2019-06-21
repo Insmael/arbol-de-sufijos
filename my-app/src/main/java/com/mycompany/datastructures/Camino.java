@@ -3,10 +3,10 @@ package com.mycompany.datastructures;
 public class Camino
 {
   INode node;
-  Integer index;
-  Integer length;
+  int index;
+  int length;
 
-  public Camino(INode node, Integer idx, Integer length)
+  public Camino(INode node, int idx, int length)
   {
     this.node = node;
     this.index = idx;
@@ -18,27 +18,27 @@ public class Camino
     return this.node;
   }
 
-  public Integer getIndex()
+  public int getIndex()
   {
     return this.index;
   }
 
-  public Integer getLength()
+  public int getLength()
   {
     return this.length;
   }
-  
+
   public void setNode(INode node)
   {
     this.node = node;
   }
 
-  public void setIndex(Integer idx)
+  public void setIndex(int idx)
   {
     this.index = idx;
   }
 
-  public void setLength(Integer length)
+  public void setLength(int length)
   {
     this.length = length;
   }

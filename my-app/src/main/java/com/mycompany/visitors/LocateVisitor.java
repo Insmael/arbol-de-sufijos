@@ -39,21 +39,12 @@ public class LocateVisitor extends Visitor implements IVisitor
     }
   }
 
-  void nomatch(Node node)
-  {
-    this.locations.add(-1);
-  }
-
   void pathpartialmatch(Camino camino, int shared)
   {
     if (this.index == this.wlength)
     {
       //si se consumio por completo la palabra buscada
       camino.getNode().accept(this);
-    }
-    else
-    {
-      ;
     }
   }
 }

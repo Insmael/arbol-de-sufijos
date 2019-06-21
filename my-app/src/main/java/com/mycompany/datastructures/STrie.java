@@ -1,7 +1,6 @@
 package com.mycompany.datastructures;
 
 import com.mycompany.visitors.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class STrie
@@ -23,8 +22,8 @@ public class STrie
     this.svstr = new SearchVisitor(text,"");
     this.cvstr = new CountVisitor(text,"");
     this.lvstr = new LocateVisitor(text,"");
-    this.tvstr = new TopVisitor(text,0,0);
-    System.out.println("el arbol contendrá "+text.length()+" sufijos.");
+    this.tvstr = new TopVisitor(text,1,0);
+    //System.out.println("el arbol contendrá "+text.length()+" sufijos.");
     for (int i=0;i<text.length()-1;i++)
     {
       ivstr.reset(i);

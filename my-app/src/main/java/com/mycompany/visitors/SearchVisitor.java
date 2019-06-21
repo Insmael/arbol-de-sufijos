@@ -29,20 +29,12 @@ public class SearchVisitor extends Visitor implements IVisitor
     this.contains = true;
   }
 
-  void nomatch(Node node)
-  {
-    this.contains = false;
-  }
 
   void pathpartialmatch(Camino camino, int shared)
   {
     if (this.index == this.wlength)
     {
       this.contains = true;
-    }
-    else
-    {
-      this.contains = false;
     }
   }
 }

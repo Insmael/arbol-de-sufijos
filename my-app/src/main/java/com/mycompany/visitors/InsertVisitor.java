@@ -32,23 +32,28 @@ public class InsertVisitor implements IVisitor
   public void visitNode(Node node)
   {
     node.plus1();
-    int shared=0;
+    int shared = 0;
     int idx = -1;
+    int l = -1;
+    String wordcamino = "";
     for (Camino camino : node.getCaminos())
     {
-       shared = 0;
-       idx = camino.getIndex();
-       for(; shared<camino.getLength() && shared<this.tlength-this.index-this.pos; shared++)
-       {
-         if (!this.equalCharAt(shared,idx))
-         {
-           break;
-         }
-       }//numero de carácteres compartido
-       if (shared > 0)
-       {
+      //numero de carácteres compartidos
+      shared = 0;
+      idx = camino.getIndex();
+      l = camino.getLength();
+      wordcamino = this.text.substring(idx,idx+l);
+      for(; shared<l && shared<this.tlength-this.index-this.pos; shared++)
+      {
+        if (this.text.charAt(this.pos+this.index+shared) != wordcamino.charAt(shared))
+        {
+          break;
+        }
+      }
+      if (shared > 0)
+      {
         this.index += shared;
-        if (shared == camino.getLength())
+        if (shared == l)
         {
           camino.getNode().accept(this);
         }
@@ -56,12 +61,13 @@ public class InsertVisitor implements IVisitor
         {
           Node newson = new Node();
           newson.setCounter(camino.getNode().getCounter());
+
           //el camino que va del nuevo nodo al viejo nodo
-          newson.addCamino(new Camino(camino.getNode(), camino.getIndex()+shared, camino.getLength()-shared));
+          newson.addCamino(new Camino(camino.getNode(), idx+shared, l-shared));
+
           //ahora el viejo camino va al nuevo nodo
           camino.setNode(newson);
           camino.setLength(shared);
-          camino = null;
           newson.accept(this);
         }
         break;
@@ -72,10 +78,5 @@ public class InsertVisitor implements IVisitor
       Camino camino = new Camino(new Leaf(this.pos), this.pos+this.index, this.tlength-this.index-this.pos);
       node.addCamino(camino);
     }
-  }
-
-  Boolean equalCharAt(int offset, int pfxIndex)
-  {
-    return this.text.charAt(this.pos+this.index+offset) == this.text.charAt(pfxIndex+offset);
   }
 }

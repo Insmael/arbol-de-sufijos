@@ -24,11 +24,6 @@ public class CountVisitor extends Visitor implements IVisitor
     this.count = node.getCounter();
   }
 
-  void nomatch(Node node)
-  {
-    ;//se mantiene el contador en 0
-  }
-
   public void visitLeaf(Leaf node)
   {
     this.count = node.getCounter();
@@ -39,10 +34,6 @@ public class CountVisitor extends Visitor implements IVisitor
     if (this.index == this.wlength)
     {
       camino.getNode().accept(this);
-    }
-    else
-    {
-      ;
     }
   }
 }
