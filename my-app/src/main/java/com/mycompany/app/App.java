@@ -18,9 +18,9 @@ public class App
     Entry entry = null;
     long start, stop;
     List<Entry> entries;
-    for (String dataset : datasets)
+    for (int t_num=10;t_num<=23;t_num++)
     {
-      for (int t_num=10;t_num<=23;t_num++)
+      for (String dataset : datasets)
       {
         entries = new ArrayList<Entry>();
         //cargar los datos

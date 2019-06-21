@@ -35,17 +35,16 @@ public class InsertVisitor implements IVisitor
     int shared = 0;
     int idx = -1;
     int l = -1;
-    String wordcamino = "";
     for (Camino camino : node.getCaminos())
     {
       //numero de carácteres compartidos
       shared = 0;
       idx = camino.getIndex();
       l = camino.getLength();
-      wordcamino = this.text.substring(idx,idx+l);
       for(; shared<l && shared<this.tlength-this.index-this.pos; shared++)
       {
-        if (this.text.charAt(this.pos+this.index+shared) != wordcamino.charAt(shared))
+        if (this.text.charAt(this.pos+this.index+shared)
+            != this.text.charAt(idx+shared))
         {
           break;
         }
