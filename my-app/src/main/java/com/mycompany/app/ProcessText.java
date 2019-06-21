@@ -21,7 +21,7 @@ public class ProcessText
       String toStore="";
       for(int i =10;i<=23;i++){
         toStore = pp.toPowerOfTwoLength(text,i);
-        IO.saveProcessedDNA(text,i);
+        IO.saveProcessedDNA(toStore,i);
       }
 
       System.out.println("PREPROCESANDO ENGLISH.");
@@ -32,7 +32,7 @@ public class ProcessText
       text = pp.compressSpaces(text);
       for(int i =10;i<=23;i++){
         toStore = pp.toPowerOfTwoLength(text,i);
-        IO.saveProcessedEnglish(text,i);
+        IO.saveProcessedEnglish(toStore,i);
       }
       System.out.println("Preprocesado de los textos terminado exitosamente.");
 

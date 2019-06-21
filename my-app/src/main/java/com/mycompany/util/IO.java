@@ -36,7 +36,9 @@ public class IO {
 
   public static String loadProcessedDNA(int n){
     System.out.print("Cargando el texto procesado DNA:");
-    return readFileAsString(DIR+"dna_"+n+".txt");
+    String data = readFileAsString(DIR+"dna_"+n+".txt");
+    System.out.println("el texto es de largo:"+ data.length());
+    return data;
   }
 
   public static String loadEnglish(){
@@ -46,7 +48,9 @@ public class IO {
 
   public static String loadProcessedEnglish(int n){
     System.out.print("Cargando el texto procesado english:");
-    return readFileAsString(DIR+"eng_"+n+".txt");
+    String data = readFileAsString(DIR+"eng_"+n+".txt");
+    System.out.println("el texto es de largo:"+ data.length());
+    return data;
   }
 
   public static String readFileAsString(String fileName) {

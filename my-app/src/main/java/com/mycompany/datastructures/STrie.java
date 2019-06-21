@@ -22,10 +22,10 @@ public class STrie {
     this.cvstr = new CountVisitor(text,"");
     this.lvstr = new LocateVisitor(text,"");
     this.tvstr = new TopVisitor(text,0,0);
-
+    System.out.println("el arbol contendrá "+text.length()+" sufijos.");
     for (int i=0;i<text.length()-1;i++){
       ivstr.reset(i);
-      //System.out.println(text.charAt(i));
+      //System.out.println("insertando sufijo n:"+i);
       this.head.accept(ivstr);
       //System.out.println(this.head);
     }

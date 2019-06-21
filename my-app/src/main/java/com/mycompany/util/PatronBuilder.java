@@ -2,46 +2,21 @@ package com.mycompany.util;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class PatronBuilder {
-  List<String> patrones;
 
-  public PatronBuilder(String text){
+  public static List<String> build(String text){
     int l = text.length();
     int n = l/10;
-    int i = 0;
-    int startpos, endpos;
-    int randpos = 0;
+    List<String> results = new ArrayList<String>();
+    List<String> words = Arrays.asList(text.split(" "));
     Random randomGen =new Random();
     randomGen.setSeed(12);
-
-    while (i<n){
-      // random number between 0 y l-1
-      randpos = randomGen.nextInt(l);
-      if(text.charAt(randpos)==' ' && randpos<l-1){
-        startpos = randpos+1;
-      } else{
-        startpos = randpos-1;
-        while(startpos>0){
-          if(text.charAt(startpos) == ' '){
-            startpos++;
-            break;
-          }
-          startpos--;
-        }
-      }
-      for (endpos = startpos;endpos<l;endpos++){
-        if(text.charAt(endpos) == ' '){
-          break;
-        }
-      }
-      patrones.add(text.substring(startpos,endpos));
-      i++;
+    for (int i=0;i<n;i++){
+      results.add(words.get(randomGen.nextInt(words.size())));
     }
-  }
-
-  public List<String> getPatrones(){
-    return this.patrones;
+    return results;
   }
 }
