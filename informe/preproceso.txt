@@ -1,0 +1,2 @@
+el preprocesamiento de los datos se efectúa como se aconseja, se eliminan los signos de puntación y saltos de linea y los espacios repetidos.
+en una primera pasada se eliminan los saltos de linea y los signos de puntación, en una segunda pasada se eliminan los espacios repetidos, así, si al eliminar un símbolo quedan espacios repetidos, estos son procesados bien en la segunda pasada.
