@@ -3,6 +3,7 @@ package com.mycompany.app;
 import com.mycompany.util.*;
 import com.mycompany.datastructures.STrie;
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 /**
  * Hello world!
@@ -10,61 +11,174 @@ import java.util.ArrayList;
  */
 public class App
 {
-    public static void main( String[] args )
+  public static void main( String[] args )
+  {
+    System.out.println("Experimentación: Árbol de sufijos.");
+    String[] datasets = {"eng","dna"};
+    Entry entry = null;
+    long start, stop;
+    List<Entry> entries;
+    for (String dataset : datasets)
     {
-      System.out.println("Experimentación: Árbol de sufijos.");
-      System.out.println("Cargando los textos.");
+      for (int t_num=10;t_num<=23;t_num++)
+      {
+        entries = new ArrayList<Entry>();
+        //cargar los datos
+        System.out.println("Cargando los datos de "+dataset+" "+t_num);
+        System.out.println("el arbol de sufijos se armará a partir de los datos anteriores");
+        String text = IO.loadData(dataset,t_num);
 
-      int img_n = Integer.valueOf(args[0]);
-      String text = IO.loadProcessedEnglish(img_n);
-      //construir el índice
-      Cronometer crn = new Cronometer();
-      System.out.println("Construyendo el arbol de sufijos.");
-      crn.tic();
-      STrie st = new STrie(text+"$");
-      crn.tac("Suffix trie build");
-      System.out.println("construcción terminada.");
-      System.out.println("tiempo requerido: "+crn.getLastTime());
-      //hacer las consultas
-      System.out.println("Consultas count");
-      List<String> words = PatronBuilder.build(text);
-      crn.tic();
-      int nconsultas=0;
-      for(String word :words){
-        st.count(word);
-        nconsultas++;
-      }
-      crn.tac("count "+nconsultas+" veces");
-      Long res = crn.getLastTime()/nconsultas;
-      System.out.println("tiempo requerido: "+crn.getLastTime());
-      System.out.println("tiempo requerido por consulta: "+res);
-      System.out.println("Consultas Locate");
-      nconsultas=0;
-      crn.tic();
-      for(String word :words)
-      {
-        st.locate(word);
-        nconsultas++;
-      }
-      crn.tac("locate "+nconsultas+" veces");
-      res = crn.getLastTime()/nconsultas;
-      System.out.println("tiempo requerido: "+crn.getLastTime());
-      System.out.println("tiempo requerido por consulta: "+res);
-      int[] ks  = {3,5,10};
-      int[] eng_qs = {4,5,6,7};
-      System.out.println("Consultas Top");
-      for(int k : ks)
-      {
-        for (int q : eng_qs)
+
+        //construir el índice
+        entry = new Entry();
+        entry.setDataset(dataset);
+        entry.setPower(t_num);
+        System.out.println("Construyendo el arbol de sufijos.");
+        start = System.nanoTime();
+        STrie st = new STrie(text+"$");
+        stop = System.nanoTime();
+        System.out.println("Construcción terminada.");
+        System.out.println("tiempo requerido: "+(stop-start));
+        entry.setConsult("build");
+        entry.setTime(stop-start);
+        entry.setWordlength(0);
+        entry.setK(0);
+        entries.add(entry);
+
+        //CONSULTAS
+        System.out.println("Comenzando las consultas");
+        //elegir las palabras aleatorias
+        List<String> words = null;
+        List<String> misswords = null;
+        if (dataset.equals("eng"))
         {
-          crn.tic();
-          st.top(k,q);
-          crn.tac("top-"+k+"-"+q);
-          System.out.println("top-"+k+"-"+q);
-          System.out.println("tiempo requerido: "+crn.getLastTime());
+          words = PatronBuilder.buildEng(text);
+          misswords = PatronBuilder.buildMissMatchEng();
         }
+        else // dataset.equals("dna")
+        {
+          words = PatronBuilder.buildDna(text);
+          misswords = PatronBuilder.buildMissMatchDna();
+        }
+
+        //consulta count
+        //hacer las consultas
+
+        System.out.println("Consultas Count.");
+        for(String word : words)
+        {
+          entry = new Entry();
+          entry.setDataset(dataset);
+          entry.setPower(t_num);
+          entry.setWordlength(word.length());
+          entry.setConsult("count");
+          entry.setK(0);
+          start = System.nanoTime();
+
+          st.count(word);
+
+          stop = System.nanoTime();
+          entry.setTime(stop-start);
+          entries.add(entry);
+        }
+
+        for(String word : misswords)
+        {
+          entry = new Entry();
+          entry.setDataset(dataset);
+          entry.setPower(t_num);
+          entry.setWordlength(word.length());
+          entry.setConsult("count");
+          entry.setK(-1);
+          start = System.nanoTime();
+
+          st.count(word);
+
+          stop = System.nanoTime();
+          entry.setTime(stop-start);
+          entries.add(entry);
+        }
+        System.out.println("Consultas Count terminadas.");
+
+
+
+        System.out.println("Consultas Locate.");
+        for(String word : words)
+        {
+          entry = new Entry();
+          entry.setDataset(dataset);
+          entry.setPower(t_num);
+          entry.setWordlength(word.length());
+          entry.setConsult("locate");
+          entry.setK(0);
+          start = System.nanoTime();
+
+          st.locate(word);
+
+          stop = System.nanoTime();
+          entry.setTime(stop-start);
+          entries.add(entry);
+        }
+        for(String word : misswords)
+        {
+          entry = new Entry();
+          entry.setDataset(dataset);
+          entry.setPower(t_num);
+          entry.setWordlength(word.length());
+          entry.setConsult("locate");
+          entry.setK(-1);
+          start = System.nanoTime();
+
+          st.locate(word);
+
+          stop = System.nanoTime();
+          entry.setTime(stop-start);
+          entries.add(entry);
+        }
+        System.out.println("Consultas Locate terminadas.");
+
+        //consultas top;
+        int[] ks  = {3,5,10};
+        int[] qs ;
+        int[] eng_qs = {4, 5, 6, 7};
+        int[] dna_qs = {4, 8, 16, 32};
+        if (dataset.equals("eng"))
+        {
+          qs = eng_qs;
+        }
+        else // dataset.equals("dna")
+        {
+          qs = dna_qs;
+        }
+
+        System.out.println("Consultas Top.");
+        for(int k : ks)
+        {
+          for (int q : qs)
+          {
+            entry = new Entry();
+            entry.setDataset(dataset);
+            entry.setPower(t_num);
+            entry.setWordlength(q);
+            entry.setConsult("top");
+            entry.setK(k);
+            start = System.nanoTime();
+
+            st.top(k,q);
+
+            stop = System.nanoTime();
+            entry.setTime(stop-start);
+            entries.add(entry);
+          }
+        }
+        System.out.println("Consultas Top terminadas.");
+        System.out.println("Todas las consultas han terminado.");
+
+
+        System.out.println("Guardando resultados.");
+        IO.saveEntries(dataset,t_num,entries);
+        System.out.println("Resultados guardados.\n");
       }
-      //mostrar los resultados
-      //graficar los resultados
     }
+  }
 }

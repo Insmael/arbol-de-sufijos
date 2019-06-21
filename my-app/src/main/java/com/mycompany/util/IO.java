@@ -2,11 +2,37 @@ package com.mycompany.util;
 
 import java.nio.file.*;
 import java.io.FileWriter;
+import java.util.List;
 
 public class IO
 {
   static String DIR = "/media/ismael/Deep Sea/Universidad/diseño y analisis de algoritmos/tarea 2/";
 
+  public static void saveEntries(String dataset, int t_num, List<Entry> entries)
+  {
+    try
+    {
+     FileWriter fw = new FileWriter(DIR+"results/"+dataset+"_"+t_num+".csv");
+     String str_entry = "";
+     for (Entry entry : entries)
+     {
+       str_entry = entry.getDataset() + "," + entry.getPower() + ","
+                  + entry.getConsult() + "," + entry.getWordlength() + ","
+                  + entry.getK() + "," + entry.getTime() + "\n";
+       fw.write(str_entry);
+     }
+     fw.close();
+    }
+    catch(Exception e)
+    {
+      System.out.println(e);
+    }
+  }
+
+  public static String loadData(String dataset, int n)
+  {
+    return readFileAsString(DIR+dataset+"_"+n+".txt");
+  }
 
   public static String loadDNA()
   {
