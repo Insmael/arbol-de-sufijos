@@ -15,7 +15,7 @@ public class PatronBuilder
     List<String> results = new ArrayList<String>();
     List<String> words = Arrays.asList(text.split(" "));
     Random randomGen =new Random();
-    randomGen.setSeed(12);
+    randomGen.setSeed(32);
     for (int i = 0; i < n; i++)
     {
       results.add(words.get(randomGen.nextInt(words.size())));
@@ -41,8 +41,8 @@ public class PatronBuilder
     List<String> results = new ArrayList<String>();
     Random randomGen =new Random();
     Random randomGen2 =new Random();
-    randomGen.setSeed(12);
-    randomGen2.setSeed(53);
+    randomGen.setSeed(32);
+    randomGen2.setSeed(15);
     int idx, len;
     for (int i = 0; i < n; i++)
     {

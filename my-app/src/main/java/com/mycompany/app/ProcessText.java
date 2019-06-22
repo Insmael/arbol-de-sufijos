@@ -29,7 +29,7 @@ public class ProcessText
       text = IO.loadEnglish();
       //preprocesar el texto
       pp.defaultTextSet();
-      text = pp.removeRegex(text);
+      text = pp.removeRegex(text, " ");
       text = pp.compressSpaces(text);
       for(int i =10;i<=23;i++)
       {

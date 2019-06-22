@@ -20,7 +20,7 @@ public class App
     long start, stop, time;
     int runs = 20;
     List<Entry> entries;
-    for (int t_num=10;t_num<=23;t_num++)
+    for (int t_num=10;t_num<=22;t_num++)
     {
       if (t_num==20) runs = 1;
       for (String dataset : datasets)

@@ -39,16 +39,13 @@ public class Visitor implements IVisitor
     else
     {
       int shared=0;
-      int idx = -1;
-      int l = -1;
       for (Camino camino : node.getCaminos())
       {
         shared = 0;
-        idx = camino.getIndex();
-        l = camino.getLength();
-        for(; shared<l && shared<this.wlength-this.index;shared++)
+        for(; shared<camino.getLength() && shared<this.wlength-this.index;shared++)
         {
-          if (this.word.charAt(this.index+shared) != this.text.charAt(idx+shared))
+          if (this.word.charAt(this.index+shared)
+                != this.text.charAt(camino.getIndex()+shared))
           {
             break;
           }
@@ -56,7 +53,7 @@ public class Visitor implements IVisitor
         if (shared > 0)
         {
           this.index += shared;
-          if (shared == l)
+          if (shared == camino.getLength())
           {
             camino.getNode().accept(this);
           }

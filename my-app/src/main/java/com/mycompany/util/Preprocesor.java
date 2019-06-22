@@ -19,11 +19,19 @@ public class Preprocesor
     this.reset();
     this.addStrToRemove(".");
     this.addStrToRemove(";");
+    this.addStrToRemove(":");
+    this.addStrToRemove("?");
+    this.addStrToRemove(")");
+    this.addStrToRemove("(");
     this.addStrToRemove(",");
     this.addStrToRemove("!");
+    this.addStrToRemove("$");
     this.addStrToRemove("\"");
     this.addStrToRemove("_");
-    this.addStrToRemove("\n");
+    this.addStrToRemove("-");
+    this.addStrToRemove("+");
+    this.addStrToRemove("|");
+
 
   }
 
@@ -48,10 +56,23 @@ public class Preprocesor
     return text;
   }
 
+  public String removeRegex(String text, String to)
+  {
+    System.out.println("removiendo los carácteres:"+this.toRemove);
+    for (String str :toRemove)
+    {
+      text = text.replace(str,to);
+    }
+    System.out.println("remoción terminada");
+    return text;
+  }
+
   public String compressSpaces(String text)
   {
     System.out.println("removiendo espacios repetidos");
+    text = text.replace("\n"," ");
     text = text.replaceAll("\\s+"," ");
+    text = text.replaceAll("[^\\u0000-\\uFFFF]", "");
     System.out.println("remoción terminada");
     return text;
   }

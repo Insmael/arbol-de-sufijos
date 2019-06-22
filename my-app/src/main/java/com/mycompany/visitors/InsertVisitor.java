@@ -33,18 +33,15 @@ public class InsertVisitor implements IVisitor
   {
     node.plus1();
     int shared = 0;
-    int idx = -1;
-    int l = -1;
     for (Camino camino : node.getCaminos())
     {
       //numero de carácteres compartidos
       shared = 0;
-      idx = camino.getIndex();
-      l = camino.getLength();
-      for(; shared<l && shared<this.tlength-this.index-this.pos; shared++)
+      for(; shared<camino.getLength()
+            && shared < this.tlength-this.index-this.pos; shared++)
       {
         if (this.text.charAt(this.pos+this.index+shared)
-            != this.text.charAt(idx+shared))
+            != this.text.charAt(camino.getIndex()+shared))
         {
           break;
         }
@@ -52,7 +49,7 @@ public class InsertVisitor implements IVisitor
       if (shared > 0)
       {
         this.index += shared;
-        if (shared == l)
+        if (shared == camino.getLength())
         {
           camino.getNode().accept(this);
         }
@@ -62,7 +59,9 @@ public class InsertVisitor implements IVisitor
           newson.setCounter(camino.getNode().getCounter());
 
           //el camino que va del nuevo nodo al viejo nodo
-          newson.addCamino(new Camino(camino.getNode(), idx+shared, l-shared));
+          newson.addCamino(new Camino(camino.getNode(),
+                            camino.getIndex()+shared,
+                            camino.getLength()-shared));
 
           //ahora el viejo camino va al nuevo nodo
           camino.setNode(newson);
@@ -74,7 +73,9 @@ public class InsertVisitor implements IVisitor
     }
     if(shared==0)
     {
-      Camino camino = new Camino(new Leaf(this.pos), this.pos+this.index, this.tlength-this.index-this.pos);
+      Camino camino = new Camino(new Leaf(this.pos),
+                                  this.pos+this.index,
+                                  this.tlength-this.index-this.pos);
       node.addCamino(camino);
     }
   }
