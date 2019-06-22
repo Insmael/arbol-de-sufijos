@@ -17,37 +17,5 @@ Si comparte solo un substring del camino. Osea, son iguales desde i hasta k, i+k
 Si el carácter que toca ver del string a insertar es el simbolo terminal, entonces se construye una hoja.
 Si no sucede ninguno de los casos anteriores, es porque el resto del string a insertar no tiene ningúna similitud con los hijos del nodo interno actual. Y procedemos a crear un nuevo nodo hijo, asociandole el resto del string (menos el carácter terminal), y actualizamos el índice para que indique al último elemento del string a insertar, pasandole el resto de la inserción al nuevo nodo interno, para que este cree luego el nodo hoja correspondiente.
 
-%codigo isertar%
-public TrieNode insert(String word, int index){
-  int at = this.containsAt(word, index);
-  if (at != -1) {
-    int length = this.containsLength(word,index,at);
-    String camino = caminos.get(at);
-    TrieNode oldson = sons.get(at);
-    if (length == camino.length()){
-      oldson.insert(word,index+length);
-    } else {
-      //length es menor al camino completo
-      String newCamino = camino.substring(0,length);
-      String restCamino = camino.substring(length, camino.length());
-      TrieNode newson = new PInnerNode(restCamino, oldson);
-      caminos.set(at, newCamino);
-      sons.set(at, newson);
-      newson.insert(word, index+length);
-    }
-  } else {
-    //si no lo contiene y es para crear una hoja.
-    if (word.charAt(index) == '$'){
-      sons.add(new Leaf(word));
-    //si no lo contiene y no es una hoja.
-    } else {
-      int subLength = word.length()-index-1;
-      caminos.add(word.substring(index, subLength));
-      sons.add(new InnerNode(word, index+subLength));
-    }
-  }
-  return this;
-}
-
 La busqueda en este nuevo arbol no cambia ni en el nodo especial ni en el nodo hojo.
 En el nodo interno, la búqueda tiene que comparar el substring entero que lleva al siguiente nodo, si está, se sigue la busqueda en este, si no está, la busqueda termina entregando falso, indicando que no se encontraba en el arbol.

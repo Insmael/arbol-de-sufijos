@@ -15,11 +15,14 @@ public class App
   {
     System.out.println("Experimentación: Árbol de sufijos.");
     String[] datasets = {"eng","dna"};
+    STrie st= null;
     Entry entry = null;
-    long start, stop;
+    long start, stop, time;
+    int runs = 20;
     List<Entry> entries;
     for (int t_num=10;t_num<=23;t_num++)
     {
+      if (t_num==20) runs = 1;
       for (String dataset : datasets)
       {
         entries = new ArrayList<Entry>();
@@ -35,12 +38,19 @@ public class App
         entry.setPower(t_num);
         System.out.println("Construyendo el arbol de sufijos.");
         start = System.nanoTime();
-        STrie st = new STrie(text+"$");
+
+        for (int vuelta = 0; vuelta < runs; vuelta++)
+        {
+        st = new STrie(text+"$");
+        }
+
         stop = System.nanoTime();
+        time = (stop-start)/runs;
+        entry.setTime(time);
         System.out.println("Construcción terminada.");
         System.out.println("tiempo requerido: "+(stop-start));
         entry.setConsult("build");
-        entry.setTime(stop-start);
+        entry.setTime(time);
         entry.setWordlength(0);
         entry.setK(0);
         entries.add(entry);
@@ -65,7 +75,7 @@ public class App
         //hacer las consultas
 
         System.out.println("Consultas Count.");
-        for(String word : words)
+        for (String word : words)
         {
           entry = new Entry();
           entry.setDataset(dataset);
@@ -75,10 +85,14 @@ public class App
           entry.setK(0);
           start = System.nanoTime();
 
-          st.count(word);
+          for (int vuelta = 0; vuelta < runs; vuelta++)
+          {
+            st.count(word);
+          }
 
           stop = System.nanoTime();
-          entry.setTime(stop-start);
+          time = (stop-start)/runs;
+          entry.setTime(time);
           entries.add(entry);
         }
 
@@ -92,10 +106,14 @@ public class App
           entry.setK(-1);
           start = System.nanoTime();
 
-          st.count(word);
+          for (int vuelta = 0; vuelta < runs; vuelta++)
+          {
+            st.count(word);
+          }
 
           stop = System.nanoTime();
-          entry.setTime(stop-start);
+          time = (stop-start)/runs;
+          entry.setTime(time);
           entries.add(entry);
         }
         System.out.println("Consultas Count terminadas.");
@@ -103,7 +121,7 @@ public class App
 
 
         System.out.println("Consultas Locate.");
-        for(String word : words)
+        for (String word : words)
         {
           entry = new Entry();
           entry.setDataset(dataset);
@@ -113,10 +131,14 @@ public class App
           entry.setK(0);
           start = System.nanoTime();
 
-          st.locate(word);
+          for (int vuelta = 0; vuelta < runs; vuelta++)
+          {
+            st.locate(word);
+          }
 
           stop = System.nanoTime();
-          entry.setTime(stop-start);
+          time = (stop-start)/runs;
+          entry.setTime(time);
           entries.add(entry);
         }
         for(String word : misswords)
@@ -129,10 +151,14 @@ public class App
           entry.setK(-1);
           start = System.nanoTime();
 
-          st.locate(word);
+          for (int vuelta = 0; vuelta < runs; vuelta++)
+          {
+            st.locate(word);
+          }
 
           stop = System.nanoTime();
-          entry.setTime(stop-start);
+          time = (stop-start)/runs;
+          entry.setTime(time);
           entries.add(entry);
         }
         System.out.println("Consultas Locate terminadas.");
@@ -164,10 +190,14 @@ public class App
             entry.setK(k);
             start = System.nanoTime();
 
-            st.top(k,q);
+            for (int vuelta = 0; vuelta < runs; vuelta++)
+            {
+              st.top(k,q);
+            }
 
             stop = System.nanoTime();
-            entry.setTime(stop-start);
+            time = (stop-start)/runs;
+            entry.setTime(time);
             entries.add(entry);
           }
         }

@@ -41,16 +41,14 @@ public class Visitor implements IVisitor
       int shared=0;
       int idx = -1;
       int l = -1;
-      String wordcamino = "";
       for (Camino camino : node.getCaminos())
       {
         shared = 0;
         idx = camino.getIndex();
         l = camino.getLength();
-        wordcamino = this.text.substring(idx,idx+l);
         for(; shared<l && shared<this.wlength-this.index;shared++)
         {
-          if (this.word.charAt(this.index+shared) != wordcamino.charAt(shared))
+          if (this.word.charAt(this.index+shared) != this.text.charAt(idx+shared))
           {
             break;
           }
